@@ -1,4 +1,4 @@
-// http://www.zmangames.com/uploads/4/7/1/7/47170931/en-sylvion-rules-v3.pfd
+// http://www.zmangames.com/uploads/4/7/1/7/47170931/en-sylvion-rules-v3.pdf
 
 // Import this file later
 var intro = '{"_title":"Planting a Seed","_description":"This first step will allow you to start playing the game quickly, without having to read the rule book in its entirety. Playing this mode will introduce you to Sylvion’s core concepts.","game":{"player":{"Sylvan":{"deck":[{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"strength":4,"shortName":"F4"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"strength":4,"shortName":"F4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"strength":0,"vitality":4,"shortName":"T4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"strength":0,"vitality":4,"shortName":"T4"},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target":"elemental","shortName":"W "},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target":"elemental","shortName":"W "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target":"elemental","shortName":"E "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target":"elemental","shortName":"E "},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","shortName":"HH"},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","shortName":"HH"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target":"player","shortName":"Ow"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target":"player","shortName":"Ow"}]},"Ravage":{"deck":[{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","cost":0,"strength":3,"shortName":"E3"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","cost":0,"effect":"pump","priority":"C","shortName":"Bz"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","cost":0,"effect":"move","value":1,"priority":"D","shortName":"Sm"}]}}}}';
@@ -11,8 +11,8 @@ var intro = '{"_title":"Planting a Seed","_description":"This first step will al
 var game = {
     board: [],
     player: {
-           Player1: {
-               hand: []
+        Player1: {
+            hand: []
            },
         Player2: {
             hand: []
@@ -35,6 +35,7 @@ var game = {
     zone: {
         effects: [],
         RFG: [],
+        waterPool: 0,
         selection: {
             card: {},
             target1: {},
@@ -59,7 +60,7 @@ var historyZone = game.zone.history
 var selectedCard = game.zone.selection.card
 var selectedTarget1 = game.zone.selection.target1
 var selectedTarget2 = game.zone.selection.target2
-
+var selectedPayment = []
 
 
 
@@ -93,9 +94,6 @@ function showBoard() {
         }
         text = text + ");"
         eval(text);
-        // console.log(game.board[i][0].shortName);
-        // console.log(eval(text));
-        // console.log(game.board[i]);
     }
 }
 
@@ -103,15 +101,15 @@ function showBoard() {
 function showHand() {
 	horizontalLine();
 	for (var i = 0; i < firstPlayer.hand.length; i++) {
-		console.log(i,firstPlayer.hand[i].name,firstPlayer.hand[i].shortName);
+		console.log(i,firstPlayer.hand[i].shortName,firstPlayer.hand[i].name);
 	}
 }
-
 
 // provide spacing between output
 function horizontalLine() {
     console.log("*****");
 }
+
 function horizontalLine2() {
     console.log("==========");
 }
@@ -122,6 +120,8 @@ function emptyCard() {
     return JSON.parse(JSON.stringify(newCard))
 }
 
+// UNFINISHED FUNCTIONS
+// loop through battlefield
 function ForBattlefield(func) {
     for (var x = 2; x <= 5; x++) {
         for (var y = 2; y <= 5; y++) {
@@ -130,6 +130,7 @@ function ForBattlefield(func) {
     }
 }
 
+// loop through battlefield plus ravage stacks
 function ForExtendedBattlefield(func) {
     for (var x = 2; x <= 5; x++) {
         for (var y = 2; y <= 6; y++) {
@@ -154,7 +155,7 @@ function ForExtendedBattlefield(func) {
 // GAME FUNCTIONS
 // (all individual card effects are in a different section)
 
-// draw cards 
+// draw cards
 function draw(noOfCards, target) {
     for (var i = noOfCards; i >= 1; i--) {
         game.player[target].hand.unshift(sylvanDeck.shift());
@@ -175,7 +176,7 @@ function setLifeTotal(life) {
 
     for (var i = 0; i < life ; i++) {
         edge[i][0].shortName = "B "; // bloom
-        console.log("Bloom");
+        // console.log("Bloom");
     }
 
     for (var j = life; j < 12 ; j++) {
@@ -240,26 +241,33 @@ function playCard(card,origin,target) {
 
 
 // 4. DEFENSE
-function selectCardFromHand(index) {
+/*function selectCardFromHand(index) {
     selectedCard = firstPlayer.hand[index]
     // console.log("Selected",selectedCard.name,selectedCard.shortName);
     return "Selected " + selectedCard.name + " (" + selectedCard.shortName + ")"
-}
+}*/
 
 function deselectCard() {
     selectedCard = {}
     return "Deselected all cards"
 }
 
-function selectTarget1(target) {
-    selectedTarget1 = target
-    return "Selected " + selectedTarget1.name + " (" + selectedTarget1.shortName + ")" + " as primary target"
-}
+/*function selectTarget1(target) {
+    if (selectedCard) {
+        selectedTarget1 = target
+        return "Selected " + selectedTarget1.name + " (" + selectedTarget1.shortName + ")" + " as primary target"
+    } else {
+        return "Please select a card from hand before selecting a target"
+    }
+}*/
 
-function selectTarget2(target) {
-    selectedTarget2 = target
-    return "Selected " + selectedTarget2.name + " (" + selectedTarget2.shortName + ")" + " as secondary target"
-}
+/*function selectTarget2(target) {
+    if (selectedCard) {
+        selectedTarget2 = target
+        return "Selected " + selectedTarget2.name + " (" + selectedTarget2.shortName + ")" + " as secondary target"
+    } else {
+        return "Please select a card from hand before selecting a target"
+    }}*/
 
 
 function deselectTargets() {
@@ -268,7 +276,8 @@ function deselectTargets() {
     return "Deselected all targets"
 }
 
-
+/*
+changed card resolution into different phases
 function playCardFromHand() {
     // var card = firstPlayer.hand[n]
     // var card = firstPlayer.hand.splice(n,1)[0]
@@ -289,6 +298,72 @@ function playCardFromHand() {
     // hedgehogs
     // owl
 }
+*/
+
+function declareCardFromHand(n) {
+    selectedCard = firstPlayer.hand[n]
+    console.log("Player1 declares ", selectedCard.name)
+    return
+}
+
+function selectTarget1(x,y) {
+    if (selectedCard) {
+        selectedTarget1 = gameBoard[x][y][0]
+        if (selectedTarget1.shortName != "__") {
+            console.log("Selected " + selectedTarget1.name + " (" + selectedTarget1.shortName + ")" + " as primary target");
+        } else {
+            selectedTarget1 = gameBoard[x][y]
+            console.log("Selected board space " + x + "," + y + " as primary target");
+        }
+    } else {
+        return "Please select a card from hand before selecting a target"
+    }
+}
+
+function selectTarget2(target) {
+    if (selectedCard && selectedTarget1) {
+        selectedTarget2 = gameBoard[x][y][0]
+        if (selectedTarget2.shortName != "__") {
+            console.log("Selected " + selectedTarget2.name + " (" + selectedTarget2.shortName + ")" + " as secondary target");
+        } else {
+            selectedTarget2 = gameBoard[x][y]
+            console.log("Selected board space " + x + "," + y + " as secondary target");
+        }
+    } else {
+        return "Please select a primary target before selecting a secondary target"
+    }
+}
+
+function selectPayment() {
+    return selectedPayment = [].slice.call(arguments).sort()
+}
+
+function playCardFromHand() {
+    if (((selectedCard.target == selectedTarget1.type) || !(selectedCard.target)) && (selectedPayment.length == selectedCard.cost)) {
+        console.log("I can play ",selectedCard.name)
+        for (var i = selectedPayment.length - 1; i >= 0; i--) {
+            discardFromHand(selectedPayment[i]);
+        }
+        playCard(selectedCard,selectedTarget1,selectedTarget2);
+        var indexOfCard = firstPlayer.hand.map(function(i){return i.id}).indexOf(selectedCard.id)
+        // showHand();
+        // console.log("Discarding card ID ",selectedCard.id);
+        firstPlayer.hand.splice(indexOfCard,1);
+        discard(selectedCard);
+        deselectCard();
+        deselectTargets();
+        selectedPayment = []
+        showHand();
+    } else {
+        console.log("Can't play this card")
+    }
+}
+
+
+
+
+
+
 
 /*
 // will not implement due to complexity
@@ -306,14 +381,13 @@ function undo(noOfEffects) {
 */
 
 // card effects
-// Ravage
 function resolve(effect, value) {
     switch(effect) {
         case "pump":
             // for each grid cell, check if card type elemental then switch/case 1=>2, 2=>3, 3=>4, 0=>4
             for (var x = 2; x <= 5; x++) {
                 for (var y = 2; y <= 6; y++) {
-                    var currentCard = gameBoard[x][y][0];
+                    var currentCard = gameBoard[x][y][0]
                     if (currentCard.type == "elemental") {
                         // increase elemental strength
                         var newStr = [4,2,3,4,4][currentCard.strength]
@@ -322,7 +396,8 @@ function resolve(effect, value) {
                             var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"elemental", "strength":newStr, "shortName":newShortName};
                             console.log("Increasing",currentCard.shortName,"to",newStr);
                             discard(currentCard);
-                            gameBoard[x][y] = [newCard]
+                            console.log("Discarding ", currentCard.name)
+                            gameBoard[x][y] = [emptyCard()]
                             // Object.assign(currentCard,newCard);
                             // discard(x,y);
                         }
@@ -333,28 +408,45 @@ function resolve(effect, value) {
 
         case "move":
             // for each grid cell, check if card type elemental then move left %value spaces
-            /*for (var x = 2; x <= 5; x++) {
+            for (var x = 2; x <= 5; x++) {
                 for (var y = 2; y <= 6; y++) {
-                    var currentCard = gameBoard[x][y][0];
+                    var currentCard = gameBoard[x][y][0]
+                    // console.log(gameBoard[x][y][0]);
                     if (currentCard.type == "elemental") {
                         moveElemental([x,y],[x,y-value]);
                     }
                 }
-            }*/
-            ForExtendedBattlefield('\
+            }
+/*            ForExtendedBattlefield('\
+                console.log("x:",x, " y:", y);\
                 var currentCard = gameBoard[x][y][0];\
                 if (currentCard.type == "elemental") {\
                     moveElemental([x,y],[x,y-' + value + ']);\
                 }\
             ');
-
+*/
             // console.log("move");
             break;
 
+        case "draw":
+        // target player draws *value* cards
+            break;
+
+
+        case "destroy":
+        // discard target
+        // replace target with blank card
+            break;
+
+
+
         default:
-            console.log("This card has no effect");
+            console.log(selectedCard.name + " has no effect");
             if (selectedCard.type == "fountain" || "tree") {
-                selectedTarget1[0] = selectedCard
+                // console.log(selectedCard);
+                // console.log(selectedTarget1);
+                selectedTarget1.pop();
+                selectedTarget1.push(selectedCard);
             }
     }
 }
@@ -370,14 +462,13 @@ function moveElemental(from, to) {
     var currentCard = origin[0]
     // console.log(origin);
     console.log("Moving",currentCard.shortName);
-    if (destination[0].faction == "Sylvan") {
-        combat(orign, destination);
-    }
-    // Object.assign(destination,origin);
-    // removeFromBoard(from[0],fromz[1]);
-    destination.pop();
-    destination.push(origin.shift());
+    destination.push(origin.shift()); // moved elemental is on bottom
     origin.push(emptyCard());
+    if (destination[0].faction == "Sylvan") {
+        combat(destination);
+    } else {
+        destination.shift();
+    }
 }
 
 
@@ -393,7 +484,13 @@ function discard(x, y) {
 // new discard
 function discard(card) {
     game.player[card.faction].discard.unshift(card);
-    return card.name
+    return card
+}
+
+function discardFromHand(n) {
+    console.log("Discarded",firstPlayer.hand[n]);
+    discard(firstPlayer.hand[n])
+    firstPlayer.hand.splice(n,1);
 }
 
 /*
@@ -407,13 +504,37 @@ function remove(x,y) {
 
 function removeFromBoard(x,y) {
     var currentCard = gameBoard[x][y][0]
-    console.log("Removing",currentCard.name,"(",currentCard.shortName,")");
+    console.log("Removing (",x,",",y,")",currentCard.name);
     gameBoard[x][y] = [emptyCard()]
 }
 
 
 
-function combat() {
+function combat(a) {
+    sylvanCard = a[0]
+    ravageCard = a[1]
+    // check to make sure combat is valid
+    if (sylvanCard.faction == "Sylvan" && ravageCard.faction == "Ravage") {
+        // Sylvan card is on top of Ravage card
+        if (sylvanCard.strength >= ravageCard.strength) {
+            console.log(sylvanCard.name,">=","Ravage",ravageCard.name);
+            a.pop(); // Ravage loses
+        }
+        if (sylvanCard.strength <= ravageCard.strength) {
+            console.log(sylvanCard.name,"<=",ravageCard.name);
+            a.shift(); // sylvan loses
+            draw(1,"Player1");
+        }
+    } else {
+        horizontalLine2();
+        console.log("Combat is invalid!! Help!")
+        horizontalLine2();
+    }
+    if (a.length == 0) {
+        a.push(emptyCard());
+        console.log(sylvanCard.name,"==",ravageCard.name);
+    }
+
 // compare toughness and strength
 // move loser to discard
 
@@ -510,11 +631,12 @@ function battle() {
                 var currentCard = effectsZone[j]
                 if (currentCard.priority == String.fromCharCode(65+i)) {
                     playCard(currentCard);
+                    // console.log("j:", j);
                     removeFromBoard(j+2,6);
                 }
             }
         }
-
+        effectsZone = []
 
 
 
