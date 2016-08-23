@@ -38,8 +38,14 @@ var game = {
         waterPool: 0,
         selection: {
             card: {},
-            target1: {},
-            target2: {}
+            target1: {
+                target: {},
+                location: []
+            },
+            target2: {
+                target: {},
+                location: []
+            }
         }
     }
 }; // var game
@@ -58,8 +64,10 @@ var effectsZone = game.zone.effects
 var rfgZone = game.zone.RFG
 var historyZone = game.zone.history
 var selectedCard = game.zone.selection.card
-var selectedTarget1 = game.zone.selection.target1
-var selectedTarget2 = game.zone.selection.target2
+var selectedTarget1 = game.zone.selection.target1.target
+var selectedLocation1 = game.zone.selection.target1.location
+var selectedTarget2 = game.zone.selection.target2.target
+var selectedLocation2 = game.zone.selection.target2.location
 var selectedPayment = []
 
 
@@ -134,6 +142,7 @@ function ForBattlefield(func) {
 function ForExtendedBattlefield(func) {
     for (var x = 2; x <= 5; x++) {
         for (var y = 2; y <= 6; y++) {
+            // console.log(func);
             eval(func);
         }
     }
@@ -271,8 +280,10 @@ function deselectCard() {
 
 
 function deselectTargets() {
-    selectedTarget = {}
+    selectedTarget1 = {}
+    selectedLocation1 = []
     selectedTarget2 = {}
+    selectedLocation2 = []
     return "Deselected all targets"
 }
 
@@ -313,6 +324,7 @@ function selectTarget1(x,y) {
             selectedTarget1 = {type:"Player", target:x}
         } else {
             selectedTarget1 = gameBoard[x][y][0]
+            selectedLocation1 = [x,y]
             if (selectedTarget1.shortName != "__") {
                 console.log("Selected " + selectedTarget1.name + " (" + selectedTarget1.shortName + ")" + " as primary target");
             } else {
@@ -328,6 +340,7 @@ function selectTarget1(x,y) {
 function selectTarget2(x,y) {
     if (selectedCard && selectedTarget1) {
         selectedTarget2 = gameBoard[x][y][0]
+        selectedLocation2 = [x,y]
         if (selectedTarget2.shortName != "__") {
             console.log("Selected " + selectedTarget2.name + " (" + selectedTarget2.shortName + ")" + " as secondary target");
         } else {
@@ -417,7 +430,15 @@ function resolve(effect, value) {
 
         case "move":
             // for each grid cell, check if card type elemental then move left %value spaces
-            for (var x = 2; x <= 5; x++) {
+            if (selectedTarget1.type == "elemental") {
+                moveElemental(selectedLocation1,selectedLocation2);
+            } else {
+                console.log("no targets..moving all elementals")
+                ForExtendedBattlefield('moveElemental([x,y],[x,y-' + value + '])');
+            }
+
+
+/*            for (var x = 2; x <= 5; x++) {
                 for (var y = 2; y <= 6; y++) {
                     var currentCard = gameBoard[x][y][0]
                     // console.log(gameBoard[x][y][0]);
@@ -425,7 +446,7 @@ function resolve(effect, value) {
                         moveElemental([x,y],[x,y-value]);
                     }
                 }
-            }
+            }*/
 /*            ForExtendedBattlefield('\
                 console.log("x:",x, " y:", y);\
                 var currentCard = gameBoard[x][y][0];\
@@ -435,6 +456,7 @@ function resolve(effect, value) {
             ');
 */
             // console.log("move");
+            showBoard();
             break;
 
         case "draw":
@@ -466,7 +488,7 @@ function resolve(effect, value) {
                 }
             }
             break;*/
-            
+
         case "counter": 
             console.log("choosing a card to counter");
             break;
@@ -494,18 +516,22 @@ function useHedgehog(x,y) {
 // used in: simoon, move phase, whale
 function moveElemental(from, to) {
     // if destination has a fountain/tree, call combat function
+    // console.log(from);
+    // console.log(to);
     var origin = gameBoard[from[0]][from[1]]
     var destination = gameBoard[to[0]][to[1]]
     // need to account for if destination index is < 1.. ?
     var currentCard = origin[0]
     // console.log(origin);
-    console.log("Moving",currentCard.shortName);
-    destination.push(origin.shift()); // moved elemental is on bottom
-    origin.push(emptyCard());
-    if (destination[0].faction == "Sylvan") {
-        combat(destination);
-    } else {
-        destination.shift();
+    if (currentCard.type == "elemental") {
+        console.log("Moving",currentCard.shortName);
+        destination.push(origin.shift()); // moved elemental is on bottom
+        origin.push(emptyCard());
+        if (destination[0].faction == "Sylvan") {
+            combat(destination);
+        } else {
+            destination.shift();
+        }
     }
 }
 
@@ -536,7 +562,10 @@ function deleteCard(card) {
         card[attrname] = "";
         //delete card.attrname;
     }
-    card = Object.assign(emptyCard())
+
+    for (var attrname in emptyCard()) {
+        card[attrname] = emptyCard()[attrname]
+    }
 }
 
 
@@ -709,7 +738,7 @@ function resolveRavage() {
         // move elementals by 1 space
         horizontalLine();
         console.log("Move Elementals");
-        resolve("move",1);
+        ForExtendedBattlefield(resolve("move",1));
         //show board after moving
         showBoard();
 }
