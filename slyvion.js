@@ -176,23 +176,29 @@ function draw(noOfCards, target) {
 // set life total and update edge cards
 function setLifeTotal(life) {
     // define location and order of edge cards
-    var b = game.board;
-    var edge = [
-            b[1][5], b[1][4], b[1][3], b[1][2], // top edge
-            b[2][1], b[3][1], b[4][1], b[5][1], // left edge
-            b[6][2], b[6][3], b[6][4], b[6][5]  // bot edge
-               ]
+    if (life <= 0) {
+        console.log("you lose");
+        return "rip"
+    } else {
+        var b = game.board;
+        var edge = [
+                b[1][5], b[1][4], b[1][3], b[1][2], // top edge
+                b[2][1], b[3][1], b[4][1], b[5][1], // left edge
+                b[6][2], b[6][3], b[6][4], b[6][5]  // bot edge
+                   ]
 
-    for (var i = 0; i < life ; i++) {
-        edge[i][0].shortName = "B "; // bloom
-        // console.log("Bloom");
-    }
+        for (var i = 0; i < life ; i++) {
+            edge[i][0].shortName = "B "; // bloom
+            edge[i][0].type = "edge";
+        }
 
-    for (var j = life; j < 12 ; j++) {
-        edge[j][0].shortName = "D " // desolated
+        for (var j = life; j < 12 ; j++) {
+            edge[j][0].shortName = "D " // desolated
+            edge[j][0].type = "edge";
+        }
+        console.log("life total set to " + life);
+        return life
     }
-    console.log("life total set to " + life);
-    return life
 } // setLifeTotal()
 
 // define battlefield area
@@ -433,7 +439,7 @@ function resolve(effect, value) {
             if (selectedTarget1.type == "elemental") {
                 moveElemental(selectedLocation1,selectedLocation2);
             } else {
-                console.log("no targets..moving all elementals")
+                console.log("no target..moving all elementals")
                 ForExtendedBattlefield('moveElemental([x,y],[x,y-' + value + '])');
             }
 
@@ -490,7 +496,8 @@ function resolve(effect, value) {
             break;*/
 
         case "counter": 
-            console.log("choosing a card to counter");
+            console.log("Countering", selectedCard.name);
+            resolve("destroy")
             break;
         
         default:
@@ -529,6 +536,10 @@ function moveElemental(from, to) {
         origin.push(emptyCard());
         if (destination[0].faction == "Sylvan") {
             combat(destination);
+        } else if (destination[0].type == "edge") {
+            setLifeTotal(game.player.Sylvan.lifeTotal -= origin[0].strength);
+            origin.shift();
+            origin.push(emptyCard());
         } else {
             destination.shift();
         }
@@ -682,16 +693,35 @@ function battle() {
     //1. reveal Ravage cards
     revealRavage();
     //1a. player has option to use cards which counter ravage : To be built
-    
+
+
+    if (firstPlayer.hand.map(function(a) {return a.effect}).includes("counter")) {
+        console.log("You may counter any ravage cards.  Proceed with continueBattle() afterwards.")
+    } else {
+        //2. Resolve Ravage cards (i.e resolving their effects)
+        resolveRavage();
+
+        //3. Move elementals by one -- right now, already in the resolveRavage() function. might need to extract out
+        //moveElemental(spaces) -- new move function which takes in number of spaces?
+        moveElementals();
+
+        //4. Draw Reinforcements (3 cards)
+        drawReinforcements();
+    }
+}
+
+function continueBattle() {
     //2. Resolve Ravage cards (i.e resolving their effects)
     resolveRavage();
 
     //3. Move elementals by one -- right now, already in the resolveRavage() function. might need to extract out
     //moveElemental(spaces) -- new move function which takes in number of spaces?
+    moveElementals();
 
-    //4. Draw Reinforcements
-    drawReinforcements();    
+    //4. Draw Reinforcements (3 cards)
+    drawReinforcements();
 }
+
 function revealRavage() {
     // 1. Reveal Ravage Cards
         // add "visible": "Player1" when implementing multiplayer
@@ -717,31 +747,34 @@ function counterRavageBeforePlay() {
 }
 
 function resolveRavage() {
-        // Resolve effects based on priority
-            // only priorities A, B, C, D
-            // elementals have no effect
-        for (var i = 0; i < 4; i++) {
-            horizontalLine2();
-            console.log("Resolving priority " + String.fromCharCode(65+i) + " cards");
-            for (var j = 0; j < effectsZone.length; j++) {
-                var currentCard = effectsZone[j]
-                if (currentCard.priority == String.fromCharCode(65+i)) {
-                    playCard(currentCard);
-                    // console.log("j:", j);
-                    removeFromBoard(j+2,6);
-                }
+    // Resolve effects based on priority
+        // only priorities A, B, C, D
+        // elementals have no effect
+    for (var i = 0; i < 4; i++) {
+        horizontalLine2();
+        console.log("Resolving priority " + String.fromCharCode(65+i) + " cards");
+        for (var j = 0; j < effectsZone.length; j++) {
+            var currentCard = effectsZone[j]
+            if (currentCard.priority == String.fromCharCode(65+i)) {
+                playCard(currentCard);
+                // console.log("j:", j);
+                removeFromBoard(j+2,6);
             }
         }
-        effectsZone = []
-
-    // 2. Move Elementals
-        // move elementals by 1 space
-        horizontalLine();
-        console.log("Move Elementals");
-        ForExtendedBattlefield(resolve("move",1));
-        //show board after moving
-        showBoard();
+    }
+    effectsZone = []
 }
+
+function moveElementals() {
+    // 2. Move Elementals
+    // move elementals by 1 space
+    horizontalLine();
+    console.log("Move Elementals");
+    ForExtendedBattlefield(resolve("move",1));
+    //show board after moving
+    showBoard();
+}
+
 
 function drawReinforcements() {
         horizontalLine();
@@ -749,7 +782,7 @@ function drawReinforcements() {
         draw(3,"Player1");
         showHand();
 
-    // 4. Defense
+        // 4. Defense
         // require console input
         // console.log("Player1's Hand",cardNames(firstPlayer.hand));
         // playCardFromHand(card#)
