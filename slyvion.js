@@ -8,7 +8,7 @@ var intro = '{"_title":"Planting a Seed","_description":"This first step will al
 // function card(properties)
 // this.properties = values
 
-var game = {
+var game = {    
     board: [],
     player: {
         Player1: {
@@ -740,11 +740,7 @@ function revealRavage() {
         }
 
 }
- 
-function counterRavageBeforePlay() {
-    //Optional play: play cards which can be actioned before resolving priorities (i.e. hedgehog)
 
-}
 
 function resolveRavage() {
     // Resolve effects based on priority
