@@ -2,26 +2,27 @@
 // this module contains everything that apply to all types of games
 // all games have a board and have players
 var gameModule = (function(){
-	// global game object
-	var _game = new game();
+	// player constructor
+	function player(game){
+		this.id = _.uniqueId()
+		this.name = "Player" + (game.players.length + 1)
+		this.game = game	// reference current game
+	}
 
 	// game constructor
 	function game(){
-		this.board = new Array()
-		this.players = new Array()
+		this.board = []
+		this.players = []
 
-		function player(){
-			this.id = _.uniqueId()
-			this.name = "Player" + (_game.players.length + 1)
-		}
-
-		this.functions = {
-			newPlayer: (function(){
-				_game.players.push(new player());
-				return _game.players
-			})
+		// this wont be repeated for each instance of the game like before
+		game.prototype.newPlayer = function(){
+			this.players.push(new player(this));
+			return this.players
 		}
 	}
 
-	return _game
+	return {
+		game: game,
+		player: player
+	}
 })()

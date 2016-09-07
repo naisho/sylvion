@@ -102,5 +102,40 @@ var helperFunctions = (function(global)){
 }
 
 
+NOTES:
+
+ES6:
+arrow functions, spread operator, destructuring, better object literals, real modules, etc
+doesn't work in older browsers, just FF, chrome, newer safari, maybe edge
+
+
+const gameModule = (()=>{
+    function player(game){
+        this.game = game
+        this.id = _.uniqueId()
+        this.name = "Player" + (game.players.length + 1)
+    }
+
+    function game(){
+        this.board = []
+        this.players = []
+    }
+
+    game.prototype.newPlayer = function() {
+        this.players.push(new player(this))
+        return this.players
+    }
+
+    return {game, player}
+})()
+
+anyway let me just recap to make sure i understand what you did
+so we moved the player constructor outside of the game constructor to separate them because theres no reason that it should be inside
+then exposed player in return player:player
+so its accessable from the other modules
+
+yes. also moved the newPlayer to be on the prototype, instead of creating a "functions" object for each instance of game
+also added a cyclical reference from player -> game, but you might not need that
+also with this, you'd need to create an instance later.
 
 */

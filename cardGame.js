@@ -30,9 +30,9 @@ var gameModule = (function(_game){
 	}
 
 	// players have a hand, deck, and discard pile in card games
-	// _game.functions.newPlayer.prototype.hand = Array.new
-	// _game.functions.newPlayer.prototype.deck = Array.new
-	// _game.functions.newPlayer.prototype.discard = Array.new
+	// _game.functions.player.prototype.hand = Array.new
+	// _game.functions.player.prototype.deck = Array.new
+	// _game.functions.player.prototype.discard = Array.new
 
 	// _game.functions
 
@@ -59,7 +59,7 @@ var gameModule = (function(_game){
 
 
 	return {
-		debug: _game
+		// debug: _game
 		// importDeck: importDeck(json),
 		// loadGameState: loadGameState(json)
 	}
