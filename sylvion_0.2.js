@@ -9,7 +9,6 @@
 	// DONE - card games have the assigned zones
 	// card games have hands of cards (showhand)
 	// card games have card game functions (shuffle)
-	// card game helper functions (emptycard, forbattlefield)
 	// card game regular functions (draw, play card, select target, discard...)
 
 // load sylvion cards
@@ -21,6 +20,7 @@
 	// sylvion has a battlefield (showboard)
 	// sylvion uses life total
 	// sylvion specific functions (move elementals, combat, newgame revealravage)
+	// sylvion helper functions (emptycard, forbattlefield)
 	// sylvion phases
 
 // load sylvion card effects
