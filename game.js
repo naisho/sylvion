@@ -6,7 +6,7 @@ var gameModule = (function(){
 	// player constructor
 	function player(game) {
 		this.id = _.uniqueId();
-		// this.name = "Player" + (game.players.length + 1);
+		this.name = "Player" + (game.players.length + 1);
 		this.game = game;	// reference current game
 	};
 
@@ -16,11 +16,9 @@ var gameModule = (function(){
 		this.players = [];
 	};
 
-
 	game.prototype.newPlayer = function() {
-		this.players.push(new player(this));
+		this.players.push(new gameModule.player(this));
 		return this.players
-		// the scope of this function is only inside this module
 	};
 
 	return {

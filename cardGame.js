@@ -23,7 +23,7 @@ var gameModule = (function(game,player){
 	}
 	
 	// games like mtg and sylvion have a stack, rfg and targets
-	var oldProto = game.prototype	// preserve prototype (newPlayer)
+	var oldProto = game.prototype.newPlayer	// preserve prototype (newPlayer)
 	game = (function(old) {
 		return function game() {
 			old.apply(this);
@@ -38,25 +38,26 @@ var gameModule = (function(game,player){
 				}
 			};
 		};
-	}(game));
-	// game.prototype = oldProto	// copying this prototype also copies its previous scope
-	console.log(oldProto)
-
-	game.prototype.newPlayer = function() {
-		this.players.push(new player(this));
-		return this.players
-	};
-	// console.log(game.prototype)
+	}(game))
+	game.prototype.newPlayer = oldProto
 
 	player = (function(old) {
-		return function player() {
-			old.apply(this);
+		return function player(game) {
+			old.apply(this, [game]);
 			this.hand = {}	// hand of cards
 			this.deck = {}	// deck of cards
 			this.discard = {}	// discard pile
 		};
 	}(player));
-	// player has no previous prototype
+
+	// redefine newPlayer to correct scope
+	// future: correctly implement with bind()
+	// game.prototype.newPlayer = function() {
+	// 	this.players.push(new player(this));
+	// 	return this.players
+	// };
+
+
 
 
 
