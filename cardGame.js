@@ -23,7 +23,7 @@ var gameModule = (function(game,player){
 	}
 	
 	// games like mtg and sylvion have a stack, rfg and targets
-	var oldProto = game.prototype.newPlayer	// preserve prototype (newPlayer)
+	var oldProto = game.prototype	// preserve prototype (newPlayer)
 	game = (function(old) {
 		return function game() {
 			old.apply(this);
@@ -39,38 +39,53 @@ var gameModule = (function(game,player){
 			};
 		};
 	}(game))
-	game.prototype.newPlayer = oldProto
+	game.prototype = oldProto
 
 	player = (function(old) {
 		return function player(game) {
 			old.apply(this, [game]);
-			this.hand = {}	// hand of cards
-			this.deck = {}	// deck of cards
-			this.discard = {}	// discard pile
+			this.hand = []	// hand of cards
+			this.deck = []	// deck of cards
+			this.discard = []	// discard pile
 		};
 	}(player));
 
-	// redefine newPlayer to correct scope
-	// future: correctly implement with bind()
-	// game.prototype.newPlayer = function() {
-	// 	this.players.push(new player(this));
-	// 	return this.players
-	// };
-
-
-
-
-
-
 	// card game specific functions
-	// shuffle() - minified fisher-yates shuffle
+	// minified fisher-yates shuffle
+	// shuffle(deck) // return shuffledDeck
 	game.prototype.shuffle = function shuffle(r){for(var f,n,o=r.length;o;)n=Math.floor(Math.random()*o--),f=r[o],r[o]=r[n],r[n]=f;return r}
 
-	// draw()
+	// draw(#,deck,player#) // return cardsDrawn
+	game.prototype.draw = function(no, deck, playerIndex) {
+		var player = this.players[playerIndex]
+		var hand = player.hand
+		var deck = player.deck
+		for (var i = 0; i < no; i++) {
+			hand.push(deck.shift());
+		}
+		return hand.slice(hand.length-no,hand.length)
+	}
+
 	// playCard()
+	game.prototype.playCard = function() {
+		
+	}
+
 	// selectTarget1()
+	game.prototype.selectTarget1 = function() {
+		
+	}
+
 	// selectTarget2()
+	game.prototype.selectTarget2 = function() {
+		
+	}
+
 	// discard()
+	game.prototype.discard = function() {
+		
+	}
+
 	// ...
 
 	// card game specific helper functions

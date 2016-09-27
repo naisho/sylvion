@@ -7,7 +7,19 @@
 	<script type="text/javascript" src="cardGame.js"></script>
 	<script>
 	a = new gameModule.game();
-	console.log(a);
+	console.log("Created new game: ",a);
+	a.newPlayer();
+	console.log("Created new player: ",a.players[0])
+	a.players[0].deck = [{name:"card1"},{name:"card2"},{name:"card3"},{name:"card4"},{name:"card5"}]
+	console.log("Filled deck with :",a.players[0].deck.map(function(card){return card.name}))
+	a.shuffle(a.players[0].deck);
+	console.log("Shuffled deck :",a.players[0].deck.map(function(card){return card.name}))
+	console.log("Drew 2 cards: ",a.draw(2,a.players[0].deck,0).map(function(card){return card.name}))
+	console.log("Remaining deck :",a.players[0].deck.map(function(card){return card.name}))
+	console.log("Player's hand: ",a.players[0].hand.map(function(card){return card.name}))
+	console.log("Drew 1 card: ",a.draw(1,a.players[0].deck,0).map(function(card){return card.name}))
+	console.log("Remaining deck :",a.players[0].deck.map(function(card){return card.name}))
+	console.log("Player's hand: ",a.players[0].hand.map(function(card){return card.name}))
 	</script>
 </head>
 <body>
