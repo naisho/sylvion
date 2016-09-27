@@ -88,6 +88,85 @@ var gameModule = (function(game,player){
 
 	// ...
 
+/*
+//new playcard
+function playCard(card,origin,target) {
+    horizontalLine();
+    console.log("Resolving",card.name);
+    resolve(card.effect,card.value);
+    discard(card);
+}
+
+
+function selectTarget1(x,y) {
+    if (selectedCard) {
+        if ((typeof(x) == "string") && (y == null)) {
+            selectedTarget1 = {type:"Player", target:x}
+        } else {
+            selectedTarget1 = gameBoard[x][y][0]
+            selectedLocation1 = [x,y]
+            if (selectedTarget1.shortName != "__") {
+                console.log("Selected " + selectedTarget1.name + " (" + selectedTarget1.shortName + ")" + " as primary target");
+            } else {
+                selectedTarget1 = gameBoard[x][y]
+                console.log("Selected board space " + x + "," + y + " as primary target");
+            }
+        }
+    } else {
+        return "Please declare a card from hand before selecting a target"
+    }
+}
+
+function selectTarget2(x,y) {
+    if (selectedCard && selectedTarget1) {
+        selectedTarget2 = gameBoard[x][y][0]
+        selectedLocation2 = [x,y]
+        if (selectedTarget2.shortName != "__") {
+            console.log("Selected " + selectedTarget2.name + " (" + selectedTarget2.shortName + ")" + " as secondary target");
+        } else {
+            selectedTarget2 = gameBoard[x][y]
+            console.log("Selected board space " + x + "," + y + " as secondary target");
+        }
+    } else {
+        return "Please select a primary target before selecting a secondary target"
+    }
+}
+
+function selectPayment() {
+    if (selectedCard) {
+        return selectedPayment = [].slice.call(arguments).sort()
+    } else {
+        return "Please declare a card from hand before selecting payment"
+    }
+}
+
+function playCardFromHand() {
+    if (((selectedCard.target == selectedTarget1.type) || !(selectedCard.target)) && (selectedPayment.length == selectedCard.cost)) {
+        console.log("I can play ",selectedCard.name)
+        for (var i = selectedPayment.length - 1; i >= 0; i--) {
+            discardFromHand(selectedPayment[i]);
+        }
+        playCard(selectedCard,selectedTarget1,selectedTarget2);
+        var indexOfCard = firstPlayer.hand.map(function(i){return i.id}).indexOf(selectedCard.id)
+        // showHand();
+        // console.log("Discarding card ID ",selectedCard.id);
+        firstPlayer.hand.splice(indexOfCard,1);
+        discard(selectedCard);
+        deselectCard();
+        deselectTargets();
+        selectedPayment = []
+        showHand();
+    } else {
+        console.log("Can't play this card")
+    }
+}
+
+
+
+
+*/
+
+
 	// card game specific helper functions
 	// showHand()
 	// emptyCard()
