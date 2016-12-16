@@ -23,7 +23,7 @@ var gameModule = (function(game,player){
 	}
 	
 	// games like mtg and sylvion have a stack, rfg and targets
-	var oldProto = game.prototype	// preserve prototype (newPlayer)
+	var oldProto = game.prototype	// preserve prototype
 	game = (function(old) {
 		return function game() {
 			old.apply(this);
@@ -56,46 +56,57 @@ var gameModule = (function(game,player){
 	game.prototype.shuffle = function shuffle(r){for(var f,n,o=r.length;o;)n=Math.floor(Math.random()*o--),f=r[o],r[o]=r[n],r[n]=f;return r}
 
 	// draw(#,deck,player#) // return cardsDrawn
-	game.prototype.draw = function(no, deck, playerIndex) {
-		var player = this.players[playerIndex]
-		var hand = player.hand
-		var deck = player.deck
+	game.prototype.draw = function(no, deck, player) {
 		for (var i = 0; i < no; i++) {
-			hand.push(deck.shift());
+			player.hand.push(deck.shift());
 		}
-		return hand.slice(hand.length-no,hand.length)
+		return player.hand.slice(player.hand.length-no,player.hand.length)
 	}
 
 	// playCard()
-	game.prototype.playCard = function() {
-		
+	game.prototype.playCard = function(card,player,selection) {
+		// assign targets to card
+		card.target1 = selection.target1
+		card.target2 = selection.target2
+
+		// move card to stack
+		this.zone.stack.push(card);
+
+		// resolve effects
+		resolveStack(this.zone.stack);
+
+		// add card to discard pile
+		game.discard(card,player);
+
+		// remove targets from card
+		// deselect();
 	}
 
 	// selectTarget1()
-	game.prototype.selectTarget1 = function() {
-		
+	game.prototype.selectTarget1 = function(target) {
+		var target1 = this.zone.selection.target1
+		target1.type = target.type
+		target1.location = target.location
 	}
 
 	// selectTarget2()
-	game.prototype.selectTarget2 = function() {
-		
+	game.prototype.selectTarget2 = function(target) {
+		var target2 = this.zone.selection.target2
+		target2.type = target.type
+		target2.location = target.location
 	}
 
 	// discard()
-	game.prototype.discard = function() {
-		
+	game.prototype.discard = function(card,player) {
+		player.discard.push(card);
+		return card
 	}
 
 	// ...
 
 /*
-//new playcard
-function playCard(card,origin,target) {
-    horizontalLine();
-    console.log("Resolving",card.name);
-    resolve(card.effect,card.value);
-    discard(card);
-}
+
+do i need to add owner reference for card objects?
 
 
 function selectTarget1(x,y) {
