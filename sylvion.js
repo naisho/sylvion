@@ -1,340 +1,511 @@
-// GAME level module
-// this module contains everything that apply to all types of games
-// all games have a board and have players
-var gameModule = (function(){
-
-    // player constructor
-    function player(game) {
-        this.id = _.uniqueId();
-        this.name = "Player" + (game.players.length + 1);
-        this.game = game;   // reference current game
-    };
-
-    // game constructor
+// initialize objects that will be used in the game
     function game() {
-        this.board = [];
-        this.players = [];
+        this.board = [];  // 2D grid
+        this.players = new players;
+        this.lifeTotal = 0;
+        this.zone = {
+            stack: [],  // effects are resolved in stack order
+            rfg: [],    // removed from game
+            resource: {},   // game resources (mana, water, ...)
+            selection: {
+                card: {},   // currently selected card
+                target1: new target(),  // card primary target
+                target2: new target()   // card secondary target
+            }
+        };
     };
 
-    game.prototype.newPlayer = function() {
-        this.players.push(new gameModule.player(this));
-        return this.players
+    // ============
+    // Constructors
+    // ============
+
+    function target(type,card,loc) {
+        this.type = type || null // board, player, card
+        this.card = card || null
+        this.location = loc || null
     };
 
-    return {
-        game: game,
-        player: player
+    function location(row,col,val) {
+        this.row = row || null
+        this.column = col || null
+        this.value = val || null
+    };
+
+    // for styling only
+    function players() {
+    };
+
+    // for styling only
+    function card() {
+    };
+
+    function player(name) {
+        // this.id = _.uniqueId();
+        // this.name = "Player" + (game.players.length + 1);
+        this.name = name;
+        // this.game = game;   // reference current game
+        this.hand = []  // hand of cards
+        this.deck = []  // deck of cards
+        this.discard = []   // discard pile
+    };
+
+    game.prototype.newPlayer = function(name) {
+        this.players[name] = new player(name);
+        return this.players[name]
+    };
+    
+
+    // ================
+    // Helper Functions
+    // ================
+
+    // hr()
+    function hr() {return "=========="}
+
+    // emptyCard()
+    function emptyCard() {
+        var newCard = {"shortName":"__"}
+        return JSON.parse(JSON.stringify(newCard)) // clone newCard object
     }
-})()
 
-/* CARD GAME level module
-    This module contains everything specific to card games,
-    but not general games.  Other modules of the same level
-    can add board game functionality (dice, tokens, etc) or
-    might not even use a board.  Card games have exclusive
-    zones and use cards.
+    // showBoard()
+    game.prototype.showBoard = function() {
+        console.log(hr());
+        console.log("          1  2  3  4  5  6 ")
+        for (var x = 1; x <= 6; x++) {
+            rowText = "Row #" + x + ":  ";
+            for (var y = 1; y <= 6; y++) {
+                if (this.board[x][y].length == 0) {
+                    rowText += "__ "
+                } else {
+                    rowText += this.board[x][y][0].shortName + " "
+                }
+            }
+            console.log(rowText);
+        }
+        return hr();
+    } // showBoard()
+
+    game.prototype.showHand = function() {
+        Player1 = this.players.Player1
+        console.log(hr());
+        // console.log(Player1.hand);
+        for (var i = 0; i < Player1.hand.length; i++) {
+            console.log(i,Player1.hand[i].shortName,Player1.hand[i].name);
+        }
+        return hr();
+    }
+/*
+    // loop through battlefield
+    function ForBattlefield(func) {
+        for (var x = 2; x <= 5; x++) {
+            for (var y = 2; y <= 5; y++) {
+                eval(func);
+            }
+        }
+    }
+
+    // loop through battlefield plus ravage stacks
+    function ForExtendedBattlefield(func) {
+        for (var x = 2; x <= 5; x++) {
+            for (var y = 2; y <= 6; y++) {
+                // console.log(func);
+                eval(func);
+            }
+    }
 */
 
-// augment gameModule with properties specific to card games
-// will consider mtg, sylvion, and machikoro
-var gameModule = (function(game,player){
 
-    function target() {
-        // sylvion targets: board location, player, or card
-        this.type = null // board, player, card
-        this.location = new location()
-    }
+    // ==============
+    // Game Functions
+    // ==============
 
-    function location() {
-        this.row = _.noop()
-        this.column = _.noop()
-        this.value = null
-    }
-    
-    // games like mtg and sylvion have a stack, rfg and targets
-    var oldProto = game.prototype   // preserve prototype (newPlayer)
-    game = (function(old) {
-        return function game() {
-            old.apply(this);
-            this.zone = {
-                stack: [],  // effects are resolved in stack order
-                rfg: [],    // removed from game
-                resource: {},   // game resources (mana, water, ...)
-                selection: {
-                    card: {},   // currently selected card
-                    target1: new target(),  // card primary target
-                    target2: new target()   // card secondary target
-                }
-            };
-        };
-    }(game))
-    game.prototype = oldProto
-
-    player = (function(old) {
-        return function player(game) {
-            old.apply(this, [game]);
-            this.hand = []  // hand of cards
-            this.deck = []  // deck of cards
-            this.discard = []   // discard pile
-        };
-    }(player));
-
-    // card game specific functions
-    // minified fisher-yates shuffle
-    // shuffle(deck) // return shuffledDeck
+    // fisher-yates shuffle
+    // takes array, returns shuffled array
     game.prototype.shuffle = function shuffle(r){for(var f,n,o=r.length;o;)n=Math.floor(Math.random()*o--),f=r[o],r[o]=r[n],r[n]=f;return r}
 
-    // draw(#,deck,player#) // return cardsDrawn
-    game.prototype.draw = function(no, deck, playerIndex) {
-        var player = this.players[playerIndex]
+    // draw(#,deck,name) // return cardsDrawn
+    game.prototype.draw = function(no, deck, player) {
         var hand = player.hand
-        var deck = player.deck
         for (var i = 0; i < no; i++) {
             hand.push(deck.shift());
-        }
+        };
         return hand.slice(hand.length-no,hand.length)
+    };
+
+    // Create 6x6 board
+    game.prototype.createBoard = function(row,col) {
+        for (var x = 1; x <= row; x++) {
+            this.board.push([]);
+            for (var y = 1; y <= col ; y++) {
+                this.board[x][y] = [];
+            }
+        }
+    }; // createBoard()
+
+    // Set up Bloom/Desolate cards
+    game.prototype.setLifeTotal = function(life) {
+        // define location and order of edge cards
+        if (life <= 0) {
+            console.log("you lose");
+            return "rip"
+        } else {
+            var b = this.board;
+            var edge = [
+                    b[1][5], b[1][4], b[1][3], b[1][2], // top edge
+                    b[2][1], b[3][1], b[4][1], b[5][1], // left edge
+                    b[6][2], b[6][3], b[6][4], b[6][5]  // bot edge
+                       ]
+
+            for (var i = 0; i < life ; i++) {
+                edge[i][0] = new card();
+                edge[i][0].shortName = "B "; // bloom
+                edge[i][0].type = "Edge";
+            };
+
+            for (var j = life; j < 12 ; j++) {
+                edge[j][0] = new card();
+                edge[j][0].shortName = "D " // desolated
+                edge[j][0].type = "Edge";
+            };
+
+            this.lifeTotal = life;
+            console.log("Life total set to " + life + ".");
+            return life;
+        }
+    } // setLifeTotal()    
+
+    // Import Sylvion starter deck
+    var intro = '{"_title":"Planting a Seed","_description":"This first step will allow you to start playing the game quickly, without having to read the rule book in its entirety. Playing this mode will introduce you to Sylvion’s core concepts.","game":{"player":{"Sylvan":{"deck":[{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"target1":"board","strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"target1":"board","strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"target1":"board","strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"target1":"board","strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"target1":"board","strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"target1":"board","strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"target1":"board","strength":4,"shortName":"F4"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"target1":"board","strength":4,"shortName":"F4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"target1":"board","strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"target1":"board","strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"target1":"board","strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"target1":"board","strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"target1":"board","strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"target1":"board","strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"target1":"board","strength":0,"vitality":4,"shortName":"T4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"target1":"board","strength":0,"vitality":4,"shortName":"T4"},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target1":"elemental","target2":"linear","shortName":"W "},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target1":"elemental","target2":"linear","shortName":"W "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target1":"elemental","shortName":"E "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target1":"elemental","shortName":"E "},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","target1":"pile","shortName":"HH"},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","target1":"pile","shortName":"HH"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target1":"player","shortName":"Ow"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target1":"player","shortName":"Ow"}]},"Ravage":{"deck":[{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"}]}}}}';
+
+    game.prototype.importSet = function(file) {
+        var expansion = JSON.parse(file);
+        var sylvanDeck = this.players.Sylvan.deck
+        var ravageDeck = this.players.Ravage.deck
+
+        var sylvanExpansion = expansion.game.player.Sylvan.deck
+        var ravageExpansion = expansion.game.player.Ravage.deck
+
+        var id = 0 // unique id for each card
+        
+        // Import Sylvan cards from file
+        for (var i = sylvanExpansion.length - 1; i >= 0; i--) {
+            sylvanExpansion[i].id = id++;
+            sylvanDeck.push(sylvanExpansion[i]);
+        }
+        console.log("Loaded Sylvan deck.");
+        
+        // Import Ravage cards from file
+        for (var i = ravageExpansion.length - 1; i >= 0; i--) {
+            ravageExpansion[i].id = id++;
+            ravageDeck.push(ravageExpansion[i]);
+        }
+        console.log("Loaded Ravage deck.");
+        console.log("Finished loading " + expansion._title + ".");
+    } // importSet(file)
+
+    game.prototype.ravageReveal = function() {
+        for (var i = 2; i <= 5; i++) {
+            this.board[i][6].shift(); // remove existing card
+            this.board[i][6].push(this.players.Ravage.deck.shift());
+        }
+
+        if (this.hasHedgehogs(this.players.Player1.hand)) {
+            console.log("Would you like to play Hedgehogs?");
+        } else {
+            console.log("No Hedgehogs...continuing Ravage turn.");
+            this.ravageTurn();
+        }
+    }
+
+    game.prototype.hasHedgehogs = function(hand) {
+        for (var i = 0; i < hand.length; i++) {
+            if (hand[i].name == "Hedgehogs") {
+                return true
+            }
+        }
+        return false
+    };
+
+    game.prototype.ravageTurn = function() {
+        for (var i = 2; i <= 5; i++) {
+            // this.zone.stack.unshift(this.board[i][6].shift());
+        }
+
+        this.resolveStack();
+
+        // move all elementals forward one space
+
+        console.log("End of Ravage Turn");
+        console.log(hr());
+    }
+
+    game.prototype.resolveStack = function() {
+        // Resolving Ravage cards...
+        for (var i = 0; i < this.zone.stack.length; i++) {
+            // resolve spell
+        }
+    }
+
+    game.prototype.endTurn = function() {
+
+    }
+
+    game.prototype.isValidTarget = function(card,target1,target2) {
+        // compile array of valid targets
+        validTargets = card.target1
+        if (target2) {validTargets += " " + card.target2};
+        validTargets = validTargets.split(" ");
+        
+        // compile array of target's types
+        switch (target1.type) {
+            case "card":
+                targetTypes = target1.type + " " + target1.card.faction + " " + target1.card.type;
+                targetName = target1.card.name;
+                break;
+            case "board":
+                targetTypes = "board";
+                targetName = "Board space (" + target1.location.row + "," + target1.location.column + ")";
+                break;
+            case "player":
+                targetTypes = "player";
+                targetName = target1.location.value.name;
+                break;
+        }
+        targetTypes = targetTypes.split(" ");
+
+        for (var i = 0; i < validTargets.length; i++) {
+            for (var j = 0; j < targetTypes.length; j++) {
+                console.log("comparing",validTargets[i],"with",targetTypes[j]);
+                if (validTargets[i] == targetTypes[j]) {
+                    console.log(targetName + " is a valid target for " + card.name + ".");
+                    return true;
+                }
+            }
+        }
+        return false
     }
 
     // playCard()
-    game.prototype.playCard = function() {
-        
+    game.prototype.playCard = function(card,target1,target2,payment) {
+        if (this.isValidTarget(card,target1,target2)) {
+            if (this.isValidPayment(card,payment)) {
+                this.zone.stack.unshift(card); // copy card to stack
+                this.resolveCard(card,target1,target2);
+                this.zone.stack.shift();
+            } else {console.log("Invalid payment.");}
+        } else {console.log("Target(s) are not valid.");}
     }
 
-    // selectTarget1()
-    game.prototype.selectTarget1 = function() {
-        
+    game.prototype.isValidPayment = function(card,payment) {
+        var unique = payment.filter(function(elem, index, self) {
+            return index == self.indexOf(elem);
+        })
+
+        if (unique.length == card.cost) {
+            return true
+        } else {
+            return false
+        }
     }
 
-    // selectTarget2()
-    game.prototype.selectTarget2 = function() {
+    // playCardFromHand() HELPER
+    game.prototype.playCardFromHand = function(index,target1,target2,payment) {
+        this.playCard(this.players.Player1.hand[index],target1,target2,payment);
+        // move card to stack
+    }
+
+    // selectTarget()
+    game.prototype.selectTarget = function(arg1,arg2) {
+        // determine argument type
+        // check what card is at the location
+        // return new target object
+
+        if (arg1 instanceof location) {
+            // arg1 is a location object
+            card = this.board[arg1.row][arg1.column][0]
+            if (card == null) {selected = new target("board",null,arg1)}
+                else {selected = new target("card",card,arg1)}
+        } else if ((Number.isInteger(arg1)) && (Number.isInteger(arg2))) {
+            // arg1 and arg2 are integers
+            card = this.board[arg1][arg2][0];
+            loc = new location(arg1,arg2); // convert to location
+            if (card == null) {selected = new target("board",null,loc)}
+                else {selected = new target("card",card,loc)}
+        } else if (arg1 instanceof player) {
+            // arg1 is a player object
+            selected = new target("player",null,new location(null,null,arg1));
+        } else if (typeof arg1 == "string" || arg1 instanceof String) {
+            // arg1 is a string
+            selected = new target("player",null,new location(null,null,this.players[arg1]));
+        }
         
+        return selected
     }
 
     // discard()
-    game.prototype.discard = function() {
-        
-    }
-
-    // ...
-
-/*
-//new playcard
-function playCard(card,origin,target) {
-    horizontalLine();
-    console.log("Resolving",card.name);
-    resolve(card.effect,card.value);
-    discard(card);
-}
-
-
-function selectTarget1(x,y) {
-    if (selectedCard) {
-        if ((typeof(x) == "string") && (y == null)) {
-            selectedTarget1 = {type:"Player", target:x}
-        } else {
-            selectedTarget1 = gameBoard[x][y][0]
-            selectedLocation1 = [x,y]
-            if (selectedTarget1.shortName != "__") {
-                console.log("Selected " + selectedTarget1.name + " (" + selectedTarget1.shortName + ")" + " as primary target");
-            } else {
-                selectedTarget1 = gameBoard[x][y]
-                console.log("Selected board space " + x + "," + y + " as primary target");
-            }
+    game.prototype.discardCardFromHand = function(player,index) {
+        if (typeof player == "string" || player instanceof String) {
+            currentPlayer = this.players[player];
+        } else if (player instaceof player) {
+            currentPlayer = player;
         }
-    } else {
-        return "Please declare a card from hand before selecting a target"
+
+        this.zone.discard.unshift(currentPlayer.hand.slice(index,1));
     }
-}
-
-function selectTarget2(x,y) {
-    if (selectedCard && selectedTarget1) {
-        selectedTarget2 = gameBoard[x][y][0]
-        selectedLocation2 = [x,y]
-        if (selectedTarget2.shortName != "__") {
-            console.log("Selected " + selectedTarget2.name + " (" + selectedTarget2.shortName + ")" + " as secondary target");
-        } else {
-            selectedTarget2 = gameBoard[x][y]
-            console.log("Selected board space " + x + "," + y + " as secondary target");
-        }
-    } else {
-        return "Please select a primary target before selecting a secondary target"
-    }
-}
-
-function selectPayment() {
-    if (selectedCard) {
-        return selectedPayment = [].slice.call(arguments).sort()
-    } else {
-        return "Please declare a card from hand before selecting payment"
-    }
-}
-
-function playCardFromHand() {
-    if (((selectedCard.target == selectedTarget1.type) || !(selectedCard.target)) && (selectedPayment.length == selectedCard.cost)) {
-        console.log("I can play ",selectedCard.name)
-        for (var i = selectedPayment.length - 1; i >= 0; i--) {
-            discardFromHand(selectedPayment[i]);
-        }
-        playCard(selectedCard,selectedTarget1,selectedTarget2);
-        var indexOfCard = firstPlayer.hand.map(function(i){return i.id}).indexOf(selectedCard.id)
-        // showHand();
-        // console.log("Discarding card ID ",selectedCard.id);
-        firstPlayer.hand.splice(indexOfCard,1);
-        discard(selectedCard);
-        deselectCard();
-        deselectTargets();
-        selectedPayment = []
-        showHand();
-    } else {
-        console.log("Can't play this card")
-    }
-}
-
-
-
-
-*/
-
-
-    // card game specific helper functions
-    // showHand()
-    // emptyCard()
-
-
-/*
-    function importDeck(json){
-        return success
-    }
-*/
-
-/*
-    function loadGameState(json){
-        return success
-    }
-
-*/
-
-    // play card
-
-    // delcare card from hand
-    // select primary target
-    // select secondary target
-    // select payment
-
-    // deselect card
-    // deselect targets
-
-
-    return {
-        game: game,
-        player: player
-    }
-})(gameModule.game,gameModule.player)
-
-/* SYLVION level module
-	This module contains everything specific to Sylvion.
-	The board will be defined in detail, as well as how
-	cards are played and resolved.  
-*/
-
-// augment gameModule with Sylvion-specific properties
-var gameModule = (function(game,player){
-
-	// sylvion specific functions
-	// playCard()
-	game.prototype.playCard = function() {
-		
-	}
-
-	// selectTarget1()
-	game.prototype.selectTarget1 = function() {
-		
-	}
-
-	// selectTarget2()
-	game.prototype.selectTarget2 = function() {
-		
-	}
 
 	// declare
 
 	// select payment
 
+
 	// deselect
 
 
-/*
-// loop through battlefield
-function ForBattlefield(func) {
-    for (var x = 2; x <= 5; x++) {
-        for (var y = 2; y <= 5; y++) {
-            eval(func);
-        }
+    // ==========
+    // Start Game
+    // ==========
+
+    testGame = new game();
+
+    // Initialize game
+    game.prototype.start = function(expansion) {
+        this.board.push([]);    // offset index by 1 for easier reference
+
+        // Create players
+        Player1 = this.newPlayer("Player1");
+        Sylvan = this.newPlayer("Sylvan");
+        Ravage = this.newPlayer("Ravage");
+
+        // Set up board
+        this.createBoard(6,6);
+        this.setLifeTotal(6);
+
+        // Load cards in expansion
+        this.importSet(expansion);
+        this.shuffle(testGame.players.Sylvan.deck);
+        this.shuffle(testGame.players.Ravage.deck);
+
+        // Planting a Seed: Start with 8 cards
+        this.draw(8,Sylvan.deck,Player1);
+
+        // Ravage First Turn
+        this.ravageReveal();
     }
-}
 
-// loop through battlefield plus ravage stacks
-function ForExtendedBattlefield(func) {
-    for (var x = 2; x <= 5; x++) {
-        for (var y = 2; y <= 6; y++) {
-            // console.log(func);
-            eval(func);
-        }
-}
+    testGame.start(intro);
 
-function setLifeTotal(life) {
-    // define location and order of edge cards
-    if (life <= 0) {
-        console.log("you lose");
-        return "rip"
-    } else {
-        var b = game.board;
-        var edge = [
-                b[1][5], b[1][4], b[1][3], b[1][2], // top edge
-                b[2][1], b[3][1], b[4][1], b[5][1], // left edge
-                b[6][2], b[6][3], b[6][4], b[6][5]  // bot edge
-                   ]
+    console.log(testGame);
 
-        for (var i = 0; i < life ; i++) {
-            edge[i][0].shortName = "B "; // bloom
-            edge[i][0].type = "edge";
-        }
+    testGame.showHand()
 
-        for (var j = life; j < 12 ; j++) {
-            edge[j][0].shortName = "D " // desolated
-            edge[j][0].type = "edge";
-        }
-        console.log("life total set to " + life);
-        return life
+    // ================
+    // Spell Dictionary
+    // ================
+
+/*    effect["move"] = function(loc1,loc2) {
+        target1 = this.game.board[loc1.row][loc1.column]
+        target2 = this.game.board[loc2.row][loc2.column]
+        target2.push(target1.unshift());
     }
-} // setLifeTotal()
 
+    effect["destroy"] = function(loc1) {
+        target1 = this.game.board[loc1.row][loc1.column]
+        target1.push();
+    }
 
-function resolve(effect, value) {
-    switch(effect) {
-        case "pump":
-            // for each grid cell, check if card type elemental then switch/case 1=>2, 2=>3, 3=>4, 0=>4
-            for (var x = 2; x <= 5; x++) {
-                for (var y = 2; y <= 6; y++) {
-                    var currentCard = gameBoard[x][y][0]
-                    if (currentCard.type == "elemental") {
-                        // increase elemental strength
-                        var newStr = [4,2,3,4,4][currentCard.strength]
-                        if (currentCard.strength != newStr) {
-                            var newShortName = "B" + newStr
-                            var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"elemental", "strength":newStr, "shortName":newShortName};
-                            console.log("Increasing",currentCard.shortName,"to",newStr);
-                            discard(currentCard);
-                            console.log("Discarding ", currentCard.name)
-                            // gameBoard[x][y] = [emptyCard()]
-                            Object.assign(currentCard,newCard);
-                            // discard(x,y);
+    effect["counter"] = effect["destroy"]
+
+    effect["draw"] = function(player,arg2,value) {
+        for (var i = 0; i < no; i++) {player.hand.push(player.deck.shift());};
+    }
+*/
+
+    game.prototype.resolveCard = function(card,arg1,arg2) {
+        switch (card.effect) {
+            case "move":
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                target2 = this.board[arg2.location.row][arg2.location.column]
+                target2.push(target1.unshift());
+                break;
+            case "destroy":
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                console.log(target1);
+                target1.pop();
+                break;
+            case "counter":
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                target1.pop();
+                break;
+            case "draw":
+                for (var i = 0; i < card.value; i++) {arg1.location.value.hand.push(this.players.Sylvan.deck.shift());};
+                break;
+            case "blaze":
+                for (var row = 2; row =< 5; row++) {
+                    for (var col = 2; col =< 6; col++) {
+                        currentCard = this.board[row][col];
+                        if (currentCard.type == "elemental") {
+                            var newStr = [4,2,3,4,4][currentCard.strength]
+                            if (currentCard.strength != newStr) {
+                                var newShortName = "B" + newStr
+                                var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"blazing elemental", "strength":newStr, "shortName":"newShortName"};
+                                console.log("Increasing",currentCard.shortName,"to",newStr,".");
+                                this.board.discard.unshift(this.board[row][col].pop());
+                                this.board[row][col].unshift(newCard);
                         }
                     }
                 }
-            }
-            break;
+                break;
+            case "simoon":
+                for (var row = 2; row =< 5; row++) {
+                    for (var col = 2; col =< 6; col++) {
+                        currentCard = this.board[row][col];
+                        if (currentCard.type == "elemental") {
+                            this.board[row][col-1].pop();
+                            this.board[row][col-1].unshift(this.board[row][col].pop());
+                        }
+                    }
+                }
+                this.checkForest();
+                break;
+            case undefined:
+                // tree or fountain
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                target1.pop;
+                target1.push(card);
+                break;
+        }
+    }
 
+    this.game.prototype.checkForest = function() {
+        for (var row = 2; row =< 5; row++) {
+            currentCard = this.board[row][2];
+            if (currentCard.type == "elemental") {
+                this.setLifeTotal(this.lifeTotal - currentCard.strength);
+                this.zone.discard.unshift(this.board[row][2].pop());
+            }
+        }
+    }
+
+
+    // ===============
+    // Targetting Type
+    // ===============
+
+    target["linear"]
+    target["board"]
+    target["elemental"]
+    target["player"]
+
+
+    console.log(testGame.showBoard());
+    console.log("D O N E");
+
+
+
+/*
+function resolve(effect, value) {
+    switch(effect) {
         case "move":
             // for each grid cell, check if card type elemental then move left %value spaces
             if (selectedTarget1.type == "elemental") {
@@ -605,14 +776,4 @@ function drawReinforcements() {
 
     // 5. Show Board
 // showBoard();
-
-
 */
-
-
-
-	return {
-		game: game,
-		player: player
-	}
-})(gameModule.game,gameModule.player)
