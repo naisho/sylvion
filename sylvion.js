@@ -205,6 +205,7 @@
     } // importSet(file)
 
     game.prototype.ravageReveal = function() {
+        console.log("=== Step 1 : Reveal Ravage Cards ===");
         for (var i = 2; i <= 5; i++) {
             this.board[i][6].shift(); // remove existing card
             this.board[i][6].push(this.players.Ravage.deck.shift());
@@ -212,6 +213,9 @@
 
         if (this.hasHedgehogs(this.players.Player1.hand)) {
             console.log("Would you like to play Hedgehogs?");
+            console.log("Use (game).ravageTurn() to continue.");
+            //JENNFER COMMENT: after this, the showHand function will be called and you can see the board;
+            //if user wants to play hedgehogs, they use playCard()
         } else {
             console.log("No Hedgehogs...continuing Ravage turn.");
             this.ravageTurn();
@@ -229,26 +233,49 @@
 
     game.prototype.ravageTurn = function() {
         for (var i = 2; i <= 5; i++) {
-            // this.zone.stack.unshift(this.board[i][6].shift());
+            this.zone.stack.unshift(this.board[i][6].shift());
         }
+        this.ravageStack();
 
-        this.resolveStack();
-
-        // move all elementals forward one space
+        this.ravageAdvance();
 
         console.log("End of Ravage Turn");
+
+        this.sylvanTurn();
+
         console.log(hr());
     }
 
-    game.prototype.resolveStack = function() {
-        // Resolving Ravage cards...
+    game.prototype.ravageAdvance = function () {
+        //JENNFER COMMENT: assumption is that an advance is basically a "simoon" move so make a new card called Advance that has a simoon effect
+        c = {name:"Advance", faction:"Ravage", type:"game effect", effect:"simoon", value:"1"}
+        console.log("=== Step 2 : Move Elementals ===")
+        this.playCard(c); // JENNFER NOTE NOT DONE
+        console.log(hr());
+    }
+
+    game.prototype.ravageStack = function() {
+        //JENNFER COMMENT: play each ravage card revealed
         for (var i = 0; i < this.zone.stack.length; i++) {
-            // resolve spell
+            this.playCard(this.zone.stack.shift()); //JENNFER NOTE NOT DONE
         }
     }
 
-    game.prototype.endTurn = function() {
+    game.prototype.sylvanTurn = function() {
+        console.log("=== Step 3 : Reinforcements ===");
+        c = {name:"Reinforcements", faction:"Sylvan", type:"game effect", effect:"draw", target1:"player", value:"3"}
+        this.resolveCard(c,new target("Player1"));
+        
+        console.log(hr());
 
+        console.log("=== Step 4 : Defense ===");
+        //JENNFER COMMENT: player can choose to play the cards he just drew by using playCard(); valid payment will be checked
+        console.log("Only JENNFER can playCard() now.")
+        console.log("End turn with (game).endTurn()");
+    }
+
+    game.prototype.endTurn = function() {
+        console.log("Turn Ended...but nothing happened.")
     }
 
     game.prototype.isValidTarget = function(card,target1,target2) {
@@ -306,10 +333,10 @@
             return true
         } else {
             return false
-        }
+        }1
     }
 
-    // playCardFromHand() HELPER
+    // playCardFromHand() HELPER 
     game.prototype.playCardFromHand = function(index,target1,target2,payment) {
         this.playCard(this.players.Player1.hand[index],target1,target2,payment);
         // move card to stack
@@ -344,13 +371,12 @@
     }
 
     // discard()
-    game.prototype.discardCardFromHand = function(player,index) {
-        if (typeof player == "string" || player instanceof String) {
-            currentPlayer = this.players[player];
-        } else if (player instaceof player) {
-            currentPlayer = player;
+    game.prototype.discardCardFromHand = function(p,index) {
+        if (typeof p == "string" || p instanceof String) {
+            currentPlayer = this.players[p];
+        } else if (p instanceof player) {
+            currentPlayer = p;
         }
-
         this.zone.discard.unshift(currentPlayer.hand.slice(index,1));
     }
 
@@ -387,6 +413,7 @@
         this.shuffle(testGame.players.Ravage.deck);
 
         // Planting a Seed: Start with 8 cards
+        //JENNFER COMMENT: add to intro json file as attribute (initDraw or something) :-*
         this.draw(8,Sylvan.deck,Player1);
 
         // Ravage First Turn
@@ -441,24 +468,25 @@
                 for (var i = 0; i < card.value; i++) {arg1.location.value.hand.push(this.players.Sylvan.deck.shift());};
                 break;
             case "blaze":
-                for (var row = 2; row =< 5; row++) {
-                    for (var col = 2; col =< 6; col++) {
+                for (var row = 2; row <= 5; row++) {
+                    for (var col = 2; col <= 6; col++) {
                         currentCard = this.board[row][col];
                         if (currentCard.type == "elemental") {
-                            var newStr = [4,2,3,4,4][currentCard.strength]
+                            var newStr = [4,2,3,4,4][currentCard.strength];
                             if (currentCard.strength != newStr) {
                                 var newShortName = "B" + newStr
                                 var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"blazing elemental", "strength":newStr, "shortName":"newShortName"};
                                 console.log("Increasing",currentCard.shortName,"to",newStr,".");
                                 this.board.discard.unshift(this.board[row][col].pop());
                                 this.board[row][col].unshift(newCard);
+                            }
                         }
                     }
                 }
                 break;
             case "simoon":
-                for (var row = 2; row =< 5; row++) {
-                    for (var col = 2; col =< 6; col++) {
+                for (var row = 2; row <= 5; row++) {
+                    for (var col = 2; col <= 6; col++) {
                         currentCard = this.board[row][col];
                         if (currentCard.type == "elemental") {
                             this.board[row][col-1].pop();
@@ -470,7 +498,7 @@
                 break;
             case undefined:
                 // tree or fountain
-                target1 = this.board[arg1.location.row][arg1.location.column]
+                target1 = this.board[arg1.location.row][arg1.location.column];
                 target1.pop;
                 target1.push(card);
                 break;
@@ -478,7 +506,7 @@
     }
 
     this.game.prototype.checkForest = function() {
-        for (var row = 2; row =< 5; row++) {
+        for (var row = 2; row <= 5; row++) {
             currentCard = this.board[row][2];
             if (currentCard.type == "elemental") {
                 this.setLifeTotal(this.lifeTotal - currentCard.strength);
