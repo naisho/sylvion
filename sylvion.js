@@ -176,7 +176,7 @@
     } // setLifeTotal()    
 
     // Import Sylvion starter deck
-    var intro = '{"_title":"Planting a Seed","_description":"This first step will allow you to start playing the game quickly, without having to read the rule book in its entirety. Playing this mode will introduce you to Sylvion’s core concepts.","game":{"player":{"Sylvan":{"deck":[{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"target1":"board","strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"target1":"board","strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"target1":"board","strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"target1":"board","strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"target1":"board","strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"target1":"board","strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"target1":"board","strength":4,"shortName":"F4"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"target1":"board","strength":4,"shortName":"F4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"target1":"board","strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"target1":"board","strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"target1":"board","strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"target1":"board","strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"target1":"board","strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"target1":"board","strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"target1":"board","strength":0,"vitality":4,"shortName":"T4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"target1":"board","strength":0,"vitality":4,"shortName":"T4"},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target1":"elemental","target2":"linear","shortName":"W "},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target1":"elemental","target2":"linear","shortName":"W "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target1":"elemental","shortName":"E "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target1":"elemental","shortName":"E "},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","target1":"pile","shortName":"HH"},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","target1":"pile","shortName":"HH"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target1":"player","shortName":"Ow"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target1":"player","shortName":"Ow"}]},"Ravage":{"deck":[{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"pump","priority":"C","shortName":"Bz"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"move","value":1,"priority":"D","shortName":"Sm"}]}}}}';
+    var intro = '{"_title":"Planting a Seed","_description":"This first step will allow you to start playing the game quickly, without having to read the rule book in its entirety. Playing this mode will introduce you to Sylvion’s core concepts.","game":{"player":{"Sylvan":{"deck":[{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":0,"strength":1,"shortName":"F1"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":1,"strength":2,"shortName":"F2"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":2,"strength":3,"shortName":"F3"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"strength":4,"shortName":"F4"},{"name":"Fountain","faction":"Sylvan","type":"fountain","cost":3,"strength":4,"shortName":"F4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":0,"strength":0,"vitality":1,"shortName":"T1"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":1,"strength":0,"vitality":2,"shortName":"T2"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":2,"strength":0,"vitality":3,"shortName":"T3"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"strength":0,"vitality":4,"shortName":"T4"},{"name":"Tree","faction":"Sylvan","type":"tree","cost":3,"strength":0,"vitality":4,"shortName":"T4"},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target":"elemental","shortName":"W "},{"name":"Whale","faction":"Sylvan","type":"animal","cost":0,"effect":"move","target":"elemental","shortName":"W "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target":"elemental","shortName":"E "},{"name":"Elephant","faction":"Sylvan","type":"animal","cost":1,"effect":"destroy","target":"elemental","shortName":"E "},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","shortName":"HH"},{"name":"Hedgehogs","faction":"Sylvan","type":"animal","cost":0,"effect":"counter","shortName":"HH"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target":"player","shortName":"Ow"},{"name":"Owl","faction":"Sylvan","type":"animal","cost":1,"effect":"draw","value":3,"target":"player","shortName":"Ow"}]},"Ravage":{"deck":[{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":0,"shortName":"E0"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":1,"shortName":"E1"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":2,"shortName":"E2"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Elemental","faction":"Ravage","type":"elemental","strength":3,"shortName":"E3"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Blaze","faction":"Ravage","type":"support","effect":"blaze","priority":"C","shortName":"Bz"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"},{"name":"Simoon","faction":"Ravage","type":"support","effect":"simoon","value":1,"priority":"D","shortName":"Sm"}]}}}}';
 
     game.prototype.importSet = function(file) {
         var expansion = JSON.parse(file);
@@ -233,8 +233,11 @@
 
     game.prototype.ravageTurn = function() {
         for (var i = 2; i <= 5; i++) {
-            this.zone.stack.unshift(this.board[i][6].shift());
+            if (this.board[i][6][0].type == "support") {
+                this.zone.stack.unshift(this.board[i][6].shift());
+            }
         }
+
         this.ravageStack();
 
         this.ravageAdvance();
@@ -250,21 +253,24 @@
         //JENNFER COMMENT: assumption is that an advance is basically a "simoon" move so make a new card called Advance that has a simoon effect
         c = {name:"Advance", faction:"Ravage", type:"game effect", effect:"simoon", value:"1"}
         console.log("=== Step 2 : Move Elementals ===")
-        this.playCard(c); // JENNFER NOTE NOT DONE
+        this.resolveCard(c); // JENNFER NOTE NOT DONE
+        this.showBoard();
         console.log(hr());
     }
 
     game.prototype.ravageStack = function() {
         //JENNFER COMMENT: play each ravage card revealed
         for (var i = 0; i < this.zone.stack.length; i++) {
-            this.playCard(this.zone.stack.shift()); //JENNFER NOTE NOT DONE
+            currentCard = this.zone.stack.shift();
+            console.log(currentCard);
+            this.resolveCard(currentCard); //JENNFER NOTE NOT DONE
         }
     }
 
     game.prototype.sylvanTurn = function() {
         console.log("=== Step 3 : Reinforcements ===");
         c = {name:"Reinforcements", faction:"Sylvan", type:"game effect", effect:"draw", target1:"player", value:"3"}
-        this.resolveCard(c,new target("Player1"));
+        this.resolveCard(c,this.selectTarget("Player1"));
         
         console.log(hr());
 
@@ -380,6 +386,78 @@
         this.zone.discard.unshift(currentPlayer.hand.slice(index,1));
     }
 
+
+    game.prototype.resolveCard = function(card,arg1,arg2) {
+        switch (card.effect) {
+            case "move":
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                target2 = this.board[arg2.location.row][arg2.location.column]
+                target2.push(target1.unshift());
+                break;
+            case "destroy":
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                console.log(target1);
+                target1.pop();
+                break;
+            case "counter":
+                target1 = this.board[arg1.location.row][arg1.location.column]
+                target1.pop();
+                break;
+            case "draw":
+                for (var i = 0; i < card.value; i++) {arg1.location.value.hand.push(this.players.Sylvan.deck.shift());};
+                break;
+            case "blaze":
+                for (var row = 2; row <= 5; row++) {
+                    for (var col = 2; col <= 6; col++) {
+                        currentCard = this.board[row][col][0];
+                        if (currentCard != undefined) {
+                            if (currentCard.type == "elemental") {
+                                var newStr = [4,2,3,4,4][currentCard.strength];
+                                if (currentCard.strength != newStr) {
+                                    var newShortName = "B" + newStr
+                                    var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"blazing elemental", "strength":newStr, "shortName":newShortName};
+                                    console.log("Increasing",currentCard.shortName,"to",newStr,".");
+                                    this.players.Sylvan.discard.unshift(this.board[row][col].pop());
+                                    this.board[row][col].unshift(newCard);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case "simoon":
+                for (var row = 2; row <= 5; row++) {
+                    for (var col = 2; col <= 6; col++) {
+                        currentCard = this.board[row][col][0];
+                        if (currentCard != undefined) {
+                            if (currentCard.type.includes("elemental")) {
+                                this.board[row][col-1].pop();
+                                this.board[row][col-1].unshift(this.board[row][col].pop());
+                            }
+                        }
+                    }
+                }
+                this.checkForest();
+                break;
+            case undefined:
+                // tree or fountain
+                target1 = this.board[arg1.location.row][arg1.location.column];
+                target1.pop;
+                target1.push(card);
+                break;
+        }
+    }
+
+    game.prototype.checkForest = function() {
+        for (var row = 2; row <= 5; row++) {
+            currentCard = this.board[row][2];
+            if (currentCard.type == "elemental") {
+                this.setLifeTotal(this.lifeTotal - currentCard.strength);
+                this.zone.discard.unshift(this.board[row][2].pop());
+            }
+        }
+    }
+
 	// declare
 
 	// select payment
@@ -447,74 +525,6 @@
         for (var i = 0; i < no; i++) {player.hand.push(player.deck.shift());};
     }
 */
-
-    game.prototype.resolveCard = function(card,arg1,arg2) {
-        switch (card.effect) {
-            case "move":
-                target1 = this.board[arg1.location.row][arg1.location.column]
-                target2 = this.board[arg2.location.row][arg2.location.column]
-                target2.push(target1.unshift());
-                break;
-            case "destroy":
-                target1 = this.board[arg1.location.row][arg1.location.column]
-                console.log(target1);
-                target1.pop();
-                break;
-            case "counter":
-                target1 = this.board[arg1.location.row][arg1.location.column]
-                target1.pop();
-                break;
-            case "draw":
-                for (var i = 0; i < card.value; i++) {arg1.location.value.hand.push(this.players.Sylvan.deck.shift());};
-                break;
-            case "blaze":
-                for (var row = 2; row <= 5; row++) {
-                    for (var col = 2; col <= 6; col++) {
-                        currentCard = this.board[row][col];
-                        if (currentCard.type == "elemental") {
-                            var newStr = [4,2,3,4,4][currentCard.strength];
-                            if (currentCard.strength != newStr) {
-                                var newShortName = "B" + newStr
-                                var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"blazing elemental", "strength":newStr, "shortName":"newShortName"};
-                                console.log("Increasing",currentCard.shortName,"to",newStr,".");
-                                this.board.discard.unshift(this.board[row][col].pop());
-                                this.board[row][col].unshift(newCard);
-                            }
-                        }
-                    }
-                }
-                break;
-            case "simoon":
-                for (var row = 2; row <= 5; row++) {
-                    for (var col = 2; col <= 6; col++) {
-                        currentCard = this.board[row][col];
-                        if (currentCard.type == "elemental") {
-                            this.board[row][col-1].pop();
-                            this.board[row][col-1].unshift(this.board[row][col].pop());
-                        }
-                    }
-                }
-                this.checkForest();
-                break;
-            case undefined:
-                // tree or fountain
-                target1 = this.board[arg1.location.row][arg1.location.column];
-                target1.pop;
-                target1.push(card);
-                break;
-        }
-    }
-
-    this.game.prototype.checkForest = function() {
-        for (var row = 2; row <= 5; row++) {
-            currentCard = this.board[row][2];
-            if (currentCard.type == "elemental") {
-                this.setLifeTotal(this.lifeTotal - currentCard.strength);
-                this.zone.discard.unshift(this.board[row][2].pop());
-            }
-        }
-    }
-
 
     // ===============
     // Targetting Type
