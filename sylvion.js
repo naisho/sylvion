@@ -147,7 +147,8 @@
     game.prototype.setLifeTotal = function(life) {
         // define location and order of edge cards
         if (life <= 0) {
-            console.log("you lose");
+            console.log("Life total set to " + life + ".");
+            throw "You lost.";
             return "rip"
         } else {
             var b = this.board;
@@ -212,10 +213,12 @@
         }
 
         if (this.hasHedgehogs(this.players.Player1.hand)) {
+            this.showBoard();
+            this.showHand();
             console.log("Would you like to play Hedgehogs?");
             console.log("Use (game).ravageTurn() to continue.");
             //JENNFER COMMENT: after this, the showHand function will be called and you can see the board;
-            //if user wants to play hedgehogs, they use playCard()
+            //if user wants to play hedgehogs, they use playCardfromHand()
         } else {
             console.log("No Hedgehogs...continuing Ravage turn.");
             this.ravageTurn();
@@ -238,15 +241,21 @@
             }
         }
 
-        this.ravageStack();
+        try {
+            this.ravageStack();
 
-        this.ravageAdvance();
+            this.ravageAdvance();
+        }
+        catch(err) {
+            console.log("Error:",err);
+        }
 
         console.log("End of Ravage Turn");
 
         this.sylvanTurn();
 
         console.log(hr());
+        
     }
 
     game.prototype.ravageAdvance = function () {
@@ -262,7 +271,7 @@
         //JENNFER COMMENT: play each ravage card revealed
         for (var i = 0; i < this.zone.stack.length; i++) {
             currentCard = this.zone.stack.shift();
-            console.log(currentCard);
+            console.log(" -> Playing",currentCard.name);
             this.resolveCard(currentCard); //JENNFER NOTE NOT DONE
         }
     }
@@ -276,12 +285,14 @@
 
         console.log("=== Step 4 : Defense ===");
         //JENNFER COMMENT: player can choose to play the cards he just drew by using playCard(); valid payment will be checked
-        console.log("Only JENNFER can playCard() now.")
-        console.log("End turn with (game).endTurn()");
+        this.showHand();
+        console.log("Use playCardFromHand() n1ow.")
+        console.log("End turn with endTurn()");
     }
 
     game.prototype.endTurn = function() {
-        console.log("Turn Ended...but nothing happened.")
+        console.log("=== End of Turn ===");
+        this.ravageReveal();
     }
 
     game.prototype.isValidTarget = function(card,target1,target2) {
@@ -321,20 +332,19 @@
 
     // playCard()
     game.prototype.playCard = function(card,target1,target2,payment) {
-        if (this.isValidTarget(card,target1,target2)) {
-            if (this.isValidPayment(card,payment)) {
-                this.zone.stack.unshift(card); // copy card to stack
-                this.resolveCard(card,target1,target2);
-                this.zone.stack.shift();
-            } else {console.log("Invalid payment.");}
-        } else {console.log("Target(s) are not valid.");}
+        // validation of target and payment should be done outside of the function
+        this.zone.stack.unshift(card); // copy current card to stack
+        this.resolveCard(card,target1,target2);
+        this.zone.stack.shift(); // remove card after it has resolved
     }
 
     game.prototype.isValidPayment = function(card,payment) {
+        // remove duplicate values
         var unique = payment.filter(function(elem, index, self) {
             return index == self.indexOf(elem);
         })
 
+        // check if the cost is correct
         if (unique.length == card.cost) {
             return true
         } else {
@@ -342,10 +352,35 @@
         }1
     }
 
-    // playCardFromHand() HELPER 
-    game.prototype.playCardFromHand = function(index,target1,target2,payment) {
-        this.playCard(this.players.Player1.hand[index],target1,target2,payment);
-        // move card to stack
+    // playCardFromHand() 
+    game.prototype.playCardFromHand = function(i,t1,t2,p) {
+        currentCard = this.players.Player1.hand[index]
+
+        // ensure payment array is sorted
+        p.sort(function(a, b){return a-b});
+
+        // check if targets are valid
+        if (this.isValidTarget(currentCard,t1,t2)) {
+
+            // check if payment is valid
+            if (this.isValidPayment(currentCard,p)) {
+                
+                // copy payment from hand to discard
+                p1Hand = this.players.Player1.hand
+
+                for (var j = 0; j < p.length; j++) {
+                    this.players.Sylvan.discard.unshift(p1Hand[p[j]]);
+                }
+
+                // remove cards from hand, descending order
+                for (var j = p.length - 1; j >= 0; j--) {
+                    p1Hand.splice(p[j],1);
+                }
+
+                // play card
+                this.playCard(p1Hand[i],this.selectTarget(t1),this.selectTarget(t2),p);
+            }
+        }
     }
 
     // selectTarget()
@@ -365,6 +400,14 @@
             loc = new location(arg1,arg2); // convert to location
             if (card == null) {selected = new target("board",null,loc)}
                 else {selected = new target("card",card,loc)}
+        } else if (arg1 instanceof Array) {
+            // arg1 is an array of 2 integers
+            if (arg1.length == 2) {
+                card = this.board[arg1[0]][arg1[1]][0];
+                loc = new location(arg1[0],arg1[1]); // convert to location
+                if (card == null) {selected = new target("board",null,loc)}
+                    else {selected = new target("card",card,loc)}
+            }
         } else if (arg1 instanceof player) {
             // arg1 is a player object
             selected = new target("player",null,new location(null,null,arg1));
@@ -404,7 +447,11 @@
                 target1.pop();
                 break;
             case "draw":
-                for (var i = 0; i < card.value; i++) {arg1.location.value.hand.push(this.players.Sylvan.deck.shift());};
+                for (var i = 0; i < card.value; i++) {
+                    currentCard = this.players.Sylvan.deck.shift();
+                    console.log(" -> Drew",currentCard.name);
+                    arg1.location.value.hand.push(currentCard);
+                };
                 break;
             case "blaze":
                 for (var row = 2; row <= 5; row++) {
@@ -416,7 +463,7 @@
                                 if (currentCard.strength != newStr) {
                                     var newShortName = "B" + newStr
                                     var newCard = {"name":"Blazing Elemental", "faction":"Ravage", "type":"blazing elemental", "strength":newStr, "shortName":newShortName};
-                                    console.log("Increasing",currentCard.shortName,"to",newStr,".");
+                                    console.log("Increasing",currentCard.shortName,"to B",newStr,".");
                                     this.players.Sylvan.discard.unshift(this.board[row][col].pop());
                                     this.board[row][col].unshift(newCard);
                                 }
@@ -450,20 +497,19 @@
 
     game.prototype.checkForest = function() {
         for (var row = 2; row <= 5; row++) {
-            currentCard = this.board[row][2];
-            if (currentCard.type == "elemental") {
-                this.setLifeTotal(this.lifeTotal - currentCard.strength);
-                this.zone.discard.unshift(this.board[row][2].pop());
+            currentCard = this.board[row][2][0];
+            if (currentCard != undefined) {
+                if (currentCard.type.includes("elemental")) {
+                    this.setLifeTotal(this.lifeTotal - currentCard.strength);
+                    this.players.Ravage.discard.unshift(this.board[row][2].pop());
+                }
             }
         }
     }
 
-	// declare
-
-	// select payment
 
 
-	// deselect
+
 
 
     // ==========
@@ -499,319 +545,3 @@
     }
 
     testGame.start(intro);
-
-    console.log(testGame);
-
-    testGame.showHand()
-
-    // ================
-    // Spell Dictionary
-    // ================
-
-/*    effect["move"] = function(loc1,loc2) {
-        target1 = this.game.board[loc1.row][loc1.column]
-        target2 = this.game.board[loc2.row][loc2.column]
-        target2.push(target1.unshift());
-    }
-
-    effect["destroy"] = function(loc1) {
-        target1 = this.game.board[loc1.row][loc1.column]
-        target1.push();
-    }
-
-    effect["counter"] = effect["destroy"]
-
-    effect["draw"] = function(player,arg2,value) {
-        for (var i = 0; i < no; i++) {player.hand.push(player.deck.shift());};
-    }
-*/
-
-    // ===============
-    // Targetting Type
-    // ===============
-
-    target["linear"]
-    target["board"]
-    target["elemental"]
-    target["player"]
-
-
-    console.log(testGame.showBoard());
-    console.log("D O N E");
-
-
-
-/*
-function resolve(effect, value) {
-    switch(effect) {
-        case "move":
-            // for each grid cell, check if card type elemental then move left %value spaces
-            if (selectedTarget1.type == "elemental") {
-                moveElemental(selectedLocation1,selectedLocation2);
-            } else {
-                console.log("no target..moving all elementals")
-                ForExtendedBattlefield('moveElemental([x,y],[x,y-' + value + '])');
-            }
-
-
-            // console.log("move");
-            showBoard();
-            break;
-
-        case "draw":
-        // target player draws *value* cards
-            draw(value,selectedTarget1.target);
-            showHand();
-            break;
-
-
-        case "destroy":
-        // discard target
-            discard(selectedTarget1);
-        // replace target with blank card
-            deleteCard(selectedTarget1);
-            showBoard();
-            break;
-
-        case "whale":
-        // move elemental from origin to destination
-            console.log("its a whaleeee");
-            for (var x = 2; x <= 5; x++) {
-                for (var y = 2; y <= 6; y++) {
-                    var currentCard = gameBoard[x][y][0]
-                    // console.log(gameBoard[x][y][0]);
-                    if (currentCard.type == "elemental") {
-                        console.log("move " + value + " spaces");
-                        moveElemental([x,y],[x,y-value]);    
-                    }
-                }
-            }
-            break;
-
-        case "counter": 
-            console.log("Countering", selectedCard.name);
-            resolve("destroy")
-            break;
-        
-        default:
-            console.log(selectedCard.name + " has no effect");
-            if (selectedCard.type == "fountain" || "tree") {
-                // console.log(selectedCard);
-                // console.log(selectedTarget1);
-                selectedTarget1.pop();
-                selectedTarget1.push(selectedCard);
-            }
-    }
-}
-
-function useHedgehog(x,y) {
-    // use Hedgehog card on the board location at x, y
-    selectTarget1(x,y);
-    console.log("choosing this card to remove", selectedTarget1);
-    removeFromBoard(x,y);
-    showBoard();
-}
-
-// move elemental card
-// used in: simoon, move phase, whale
-function moveElemental(from, to) {
-    // if destination has a fountain/tree, call combat function
-    // console.log(from);
-    // console.log(to);
-    var origin = gameBoard[from[0]][from[1]]
-    var destination = gameBoard[to[0]][to[1]]
-    // need to account for if destination index is < 1.. ?
-    var currentCard = origin[0]
-    // console.log(origin);
-    if (currentCard.type == "elemental") {
-        console.log("Moving",currentCard.shortName);
-        destination.push(origin.shift()); // moved elemental is on bottom
-        origin.push(emptyCard());
-        if (destination[0].faction == "Sylvan") {
-            combat(destination);
-        } else if (destination[0].type == "edge") {
-            setLifeTotal(game.player.Sylvan.lifeTotal -= origin[0].strength);
-            origin.shift();
-            origin.push(emptyCard());
-        } else {
-            destination.shift();
-        }
-    }
-}
-
-function combat(a) {
-    sylvanCard = a[0]
-    ravageCard = a[1]
-    // check to make sure combat is valid
-    if (sylvanCard.faction == "Sylvan" && ravageCard.faction == "Ravage") {
-        // Sylvan card is on top of Ravage card
-        if (sylvanCard.strength >= ravageCard.strength) {
-            console.log(sylvanCard.name,">=","Ravage",ravageCard.name);
-            a.pop(); // Ravage loses
-        }
-        if (sylvanCard.strength <= ravageCard.strength) {
-            console.log(sylvanCard.name,"<=",ravageCard.name);
-            a.shift(); // sylvan loses
-            draw(1,"Player1");
-        }
-    } else {
-        horizontalLine2();
-        console.log("Combat is invalid!! Help!")
-        horizontalLine2();
-    }
-    if (a.length == 0) {
-        a.push(emptyCard());
-        console.log(sylvanCard.name,"==",ravageCard.name);
-}
-
-function newGame() {
-    // Populate game.board with "__" to provide spacing
-    game.board.push([]);
-    for (var i = 1; i <= 6; i++) { // for col 1-6
-        gameBoard.push([]); // create array for rows
-        gameBoard[i].push([]); // create stack in each cell
-        for (var j = 1; j <= 6; j++) {
-            gameBoard[i].push([emptyCard()]); // fill each cell with emptyCard()
-        }
-    }
-    // Below code was not used because all objects created shared the same instance in each row
-    // game.board[i] = new Array(6).fill(new Object({}));
-    // game.board[i] = [{"shortName":"01"},{"shortName":"02"},{"shortName":"03"},{"shortName":"_4"},{"shortName":"_5"},{"shortName":"_6"}]
-
-    // load decks
-    load(intro);
-    game.player.Sylvan.lifeTotal = setLifeTotal(6); // life total should be added into expansion to allow for difficulty settings
-    showBoard();
-
-    // shuffle decks
-    shuffle(sylvanDeck);
-    shuffle(ravageDeck);
-
-    // divide Ravage deck into 4 stacks
-    // stacks are game.player.Ravage.stack1, stack2, etc.
-    // console.log("ravageDeck:", ravageDeck.length);
-    for (var stackNumber = 0; stackNumber <= 3; stackNumber++) {
-        for (var cardsPerStack = ravageDeck.length/4-1; cardsPerStack >= 0; cardsPerStack--) {
-            game.player.Ravage.stacks[stackNumber].push(ravageDeck[cardsPerStack+stackNumber*ravageDeck.length/4]);
-            // console.log("Stack#",stackNumber,"Card#",cardsPerStack+stackNumber*ravageDeck.length/4,game.player.Ravage.stacks[stackNumber]);
-        }
-    }
-
-
-    draw(8,"Player1");
-//     console.log("Player1's Hand",cardNames(game.player.Player1.hand));
-//     console.log("Sylvan Deck",cardNames(game.player.Sylvan.deck));
-    
-    horizontalLine2();
-    console.log("Begin First Battle Phase");
-} // newGame()
-
-
-
-
-
-// BATTLE PHASE
-function battle() {
-    //1. reveal Ravage cards
-    revealRavage();
-    //1a. player has option to use cards which counter ravage : To be built
-
-
-    if (firstPlayer.hand.map(function(a) {return a.effect}).includes("counter")) {
-        console.log("You may counter any ravage cards.  Proceed with continueBattle() afterwards.")
-    } else {
-        //2. Resolve Ravage cards (i.e resolving their effects)
-        resolveRavage();
-
-        //3. Move elementals by one -- right now, already in the resolveRavage() function. might need to extract out
-        //moveElemental(spaces) -- new move function which takes in number of spaces?
-        moveElementals();
-
-        //4. Draw Reinforcements (3 cards)
-        drawReinforcements();
-    }
-}
-
-function continueBattle() {
-    //2. Resolve Ravage cards (i.e resolving their effects)
-    resolveRavage();
-
-    //3. Move elementals by one -- right now, already in the resolveRavage() function. might need to extract out
-    //moveElemental(spaces) -- new move function which takes in number of spaces?
-    moveElementals();
-
-    //4. Draw Reinforcements (3 cards)
-    drawReinforcements();
-}
-
-function revealRavage() {
-    // 1. Reveal Ravage Cards
-        // add "visible": "Player1" when implementing multiplayer
-        // reveal top card of each Ravage stack (move from deck to [i][6])
-        for (var i = 2; i <= 5; i++) {
-            // console.log(game.player.Ravage.stacks[i-1]);
-            gameBoard[i][6].pop(); // remove emptyCard
-            gameBoard[i][6].push(ravageStacks[i-2].shift());
-        }
-
-        showBoard();
-
-        // Add all effects to stack
-        for (var i = 2; i <= 5; i++) {
-            effectsZone.push(gameBoard[i][6][0]);
-        }
-
-}
-
-
-function resolveRavage() {
-    // Resolve effects based on priority
-        // only priorities A, B, C, D
-        // elementals have no effect
-    for (var i = 0; i < 4; i++) {
-        horizontalLine2();
-        console.log("Resolving priority " + String.fromCharCode(65+i) + " cards");
-        for (var j = 0; j < effectsZone.length; j++) {
-            var currentCard = effectsZone[j]
-            if (currentCard.priority == String.fromCharCode(65+i)) {
-                playCard(currentCard);
-                // console.log("j:", j);
-                removeFromBoard(j+2,6);
-            }
-        }
-    }
-    effectsZone = []
-}
-
-function moveElementals() {
-    // 2. Move Elementals
-    // move elementals by 1 space
-    horizontalLine();
-    console.log("Move Elementals");
-    ForExtendedBattlefield(resolve("move",1));
-    //show board after moving
-    showBoard();
-}
-
-
-function drawReinforcements() {
-        horizontalLine();
-        console.log("Get Reinforcements");
-        draw(3,"Player1");
-        showHand();
-
-        // 4. Defense
-        // require console input
-        // console.log("Player1's Hand",cardNames(firstPlayer.hand));
-        // playCardFromHand(card#)
-
-
-        // moveElemental(copy?) card to stack
-        // select cards to pay (mana pool - cost)
-        // if cant pay, return card to same spot in hand
-        // select targets if any
-        // resolve effects
-
-    // 5. Show Board
-// showBoard();
-*/
