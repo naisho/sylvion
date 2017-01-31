@@ -296,6 +296,10 @@
     }
 
     game.prototype.isValidTarget = function(card,target1,target2) {
+        if (card.target1 == undefined) {
+            return true
+        }
+
         // compile array of valid targets
         validTargets = card.target1
         if (target2) {validTargets += " " + card.target2};
@@ -332,10 +336,16 @@
 
     // playCard()
     game.prototype.playCard = function(card,target1,target2,payment) {
+        console.log("playing card ",card);
+        console.log("target1: ",target1);
+        console.log("target2: ",target2);
+        console.log("payment: ",payment);
         // validation of target and payment should be done outside of the function
         this.zone.stack.unshift(card); // copy current card to stack
         this.resolveCard(card,target1,target2);
         this.zone.stack.shift(); // remove card after it has resolved
+        this.showBoard();
+        this.showHand();
     }
 
     game.prototype.isValidPayment = function(card,payment) {
@@ -354,10 +364,7 @@
 
     // playCardFromHand() 
     game.prototype.playCardFromHand = function(i,t1,t2,p) {
-        currentCard = this.players.Player1.hand[index]
-
-        // ensure payment array is sorted
-        p.sort(function(a, b){return a-b});
+        currentCard = this.players.Player1.hand[i]
 
         // check if targets are valid
         if (this.isValidTarget(currentCard,t1,t2)) {
@@ -365,20 +372,23 @@
             // check if payment is valid
             if (this.isValidPayment(currentCard,p)) {
                 
-                // copy payment from hand to discard
-                p1Hand = this.players.Player1.hand
+                p1Hand = this.players.Player1.hand // copy payment from hand to discard
 
                 for (var j = 0; j < p.length; j++) {
                     this.players.Sylvan.discard.unshift(p1Hand[p[j]]);
                 }
 
+                p.push(i); // add index to payment array to be removed
+                p.sort(function(a, b){return a-b}); // ensure payment array is sorted
+
                 // remove cards from hand, descending order
                 for (var j = p.length - 1; j >= 0; j--) {
+                    console.log("removing ",p1Hand[p[j]].shortName);
                     p1Hand.splice(p[j],1);
                 }
 
                 // play card
-                this.playCard(p1Hand[i],this.selectTarget(t1),this.selectTarget(t2),p);
+                this.playCard(currentCard,this.selectTarget(t1),this.selectTarget(t2),p);
             }
         }
     }
@@ -439,7 +449,7 @@
                 break;
             case "destroy":
                 target1 = this.board[arg1.location.row][arg1.location.column]
-                console.log(target1);
+                console.log(" -> Destroying ",target1.name);
                 target1.pop();
                 break;
             case "counter":
@@ -451,6 +461,7 @@
                     currentCard = this.players.Sylvan.deck.shift();
                     console.log(" -> Drew",currentCard.name);
                     arg1.location.value.hand.push(currentCard);
+                    this.showHand();
                 };
                 break;
             case "blaze":
