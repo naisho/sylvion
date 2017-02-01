@@ -212,8 +212,9 @@
             this.board[i][6].push(this.players.Ravage.deck.shift());
         }
 
+        this.showBoard();
+        
         if (this.hasHedgehogs(this.players.Player1.hand)) {
-            this.showBoard();
             this.showHand();
             console.log("Would you like to play Hedgehogs?");
             console.log("Use (game).ravageTurn() to continue.");
@@ -285,8 +286,8 @@
 
         console.log("=== Step 4 : Defense ===");
         //JENNFER COMMENT: player can choose to play the cards he just drew by using playCard(); valid payment will be checked
-        this.showHand();
-        console.log("Use playCardFromHand() n1ow.")
+        // this.showHand();
+        console.log("Use playCardFromHand() now.")
         console.log("End turn with endTurn()");
     }
 
@@ -439,13 +440,16 @@
         this.zone.discard.unshift(currentPlayer.hand.slice(index,1));
     }
 
-
     game.prototype.resolveCard = function(card,arg1,arg2) {
         switch (card.effect) {
             case "move":
                 target1 = this.board[arg1.location.row][arg1.location.column]
                 target2 = this.board[arg2.location.row][arg2.location.column]
-                target2.push(target1.unshift());
+                if (target2.length > 0) {
+                    this.combat(target1,target2);
+                } else {
+                    target2.push(target1.unshift());
+                }
                 break;
             case "destroy":
                 target1 = this.board[arg1.location.row][arg1.location.column]
@@ -461,8 +465,8 @@
                     currentCard = this.players.Sylvan.deck.shift();
                     console.log(" -> Drew",currentCard.name);
                     arg1.location.value.hand.push(currentCard);
-                    this.showHand();
                 };
+                this.showHand();
                 break;
             case "blaze":
                 for (var row = 2; row <= 5; row++) {
@@ -489,8 +493,13 @@
                         currentCard = this.board[row][col][0];
                         if (currentCard != undefined) {
                             if (currentCard.type.includes("elemental")) {
-                                this.board[row][col-1].pop();
-                                this.board[row][col-1].unshift(this.board[row][col].pop());
+                                curr = this.board[row][col];
+                                next = this.board[row][col-1];
+                                if (next.length > 0) {
+                                    this.combat(curr,next);
+                                } else {
+                                    this.board[row][col-1].unshift(this.board[row][col].pop());
+                                }
                             }
                         }
                     }
@@ -503,6 +512,26 @@
                 target1.pop;
                 target1.push(card);
                 break;
+        }
+    }
+
+    game.prototype.combat = function(t1,t2) {
+        // t1 should always be an elemental, and t2 sylvan
+        c = {name:"Consolation Prize", faction:"Sylvan", type:"game effect", effect:"draw", target1:"player", value:"1"}
+
+        elemental = t1[0];
+        sylvan = t2[0];
+        console.log("Battle between ",elemental.shortName," and ",sylvan.shortName);
+        if (elemental.strength > sylvan.strength) {
+            t2.pop();
+            t2.push(t1.pop());
+            this.resolveCard(c,this.selectTarget("Player1"));
+        } else if (elemental.strength < sylvan.strength) {
+            t1.pop();
+        } else if (elemental.strength == sylvan.strength) {
+            t1.pop();
+            t2.pop();
+            this.resolveCard(c,this.selectTarget("Player1"));
         }
     }
 
@@ -556,3 +585,12 @@
     }
 
     testGame.start(intro);
+
+
+// things left to do
+// combat ** should be done
+// hedgehogs
+// win condition
+// recycling the deck
+// payment abuse check
+// target check for empty space
