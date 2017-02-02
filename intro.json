@@ -25,8 +25,8 @@
           {"name":"Whale", "faction":"Sylvan", "type":"animal", "cost":0, "effect":"move", "target":"elemental", "shortName":"W "},
           {"name":"Elephant", "faction":"Sylvan", "type":"animal", "cost":1, "effect":"destroy", "target":"elemental", "shortName":"E "},
           {"name":"Elephant", "faction":"Sylvan", "type":"animal", "cost":1, "effect":"destroy", "target":"elemental", "shortName":"E "},
-          {"name":"Hedgehogs", "faction":"Sylvan", "type":"animal", "cost":0, "effect":"counter", "target":"elemental support", "shortName":"HH"},
-          {"name":"Hedgehogs", "faction":"Sylvan", "type":"animal", "cost":0, "effect":"counter", "target":"elemental support", "shortName":"HH"},
+          {"name":"Hedgehogs", "faction":"Sylvan", "type":"animal", "cost":0, "effect":"counter", "shortName":"HH"},
+          {"name":"Hedgehogs", "faction":"Sylvan", "type":"animal", "cost":0, "effect":"counter", "shortName":"HH"},
           {"name":"Owl", "faction":"Sylvan", "type":"animal", "cost":1, "effect":"draw", "value":3, "target":"player", "shortName":"Ow"},
           {"name":"Owl", "faction":"Sylvan", "type":"animal", "cost":1, "effect":"draw", "value":3, "target":"player", "shortName":"Ow"}
         ]

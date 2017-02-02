@@ -299,40 +299,52 @@
     game.prototype.isValidTarget = function(card,target1,target2) {
         if (card.target1 == undefined) {
             return true
-        }
+        } else if (card.name == "Hedgehogs") {
+            if (target1.location.column == 6) {
+                return true
+            } else {
+                return false
+            }
+        } else if (card.name == "Whale") {
+            if ((target1.location.row == target2.location.row) || (target1.location.column == target2.location.column)) {
+                return true
+            } else {
+                return false
+            }
+        } else {    
+            // compile array of valid targets
+            validTargets = card.target1
+            if (target2) {validTargets += " " + card.target2};
+            validTargets = validTargets.split(" ");
+            
+            // compile array of target's types
+            switch (target1.type) {
+                case "card":
+                    targetTypes = target1.type + " " + target1.card.faction + " " + target1.card.type;
+                    targetName = target1.card.name;
+                    break;
+                case "board":
+                    targetTypes = "board";
+                    targetName = "Board space (" + target1.location.row + "," + target1.location.column + ")";
+                    break;
+                case "player":
+                    targetTypes = "player";
+                    targetName = target1.location.value.name;
+                    break;
+            }
+            targetTypes = targetTypes.split(" ");
 
-        // compile array of valid targets
-        validTargets = card.target1
-        if (target2) {validTargets += " " + card.target2};
-        validTargets = validTargets.split(" ");
-        
-        // compile array of target's types
-        switch (target1.type) {
-            case "card":
-                targetTypes = target1.type + " " + target1.card.faction + " " + target1.card.type;
-                targetName = target1.card.name;
-                break;
-            case "board":
-                targetTypes = "board";
-                targetName = "Board space (" + target1.location.row + "," + target1.location.column + ")";
-                break;
-            case "player":
-                targetTypes = "player";
-                targetName = target1.location.value.name;
-                break;
-        }
-        targetTypes = targetTypes.split(" ");
-
-        for (var i = 0; i < validTargets.length; i++) {
-            for (var j = 0; j < targetTypes.length; j++) {
-                console.log("comparing",validTargets[i],"with",targetTypes[j]);
-                if (validTargets[i] == targetTypes[j]) {
-                    console.log(targetName + " is a valid target for " + card.name + ".");
-                    return true;
+            for (var i = 0; i < validTargets.length; i++) {
+                for (var j = 0; j < targetTypes.length; j++) {
+                    console.log("comparing",validTargets[i],"with",targetTypes[j]);
+                    if (validTargets[i] == targetTypes[j]) {
+                        console.log(targetName + " is a valid target for " + card.name + ".");
+                        return true;
+                    }
                 }
             }
+            return false
         }
-        return false
     }
 
     // playCard()
@@ -589,7 +601,8 @@
 
 // things left to do
 // combat ** should be done
-// hedgehogs
+// hedgehogs ** should be done
+// whale target check ** should be done
 // win condition
 // recycling the deck
 // payment abuse check
