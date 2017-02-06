@@ -158,6 +158,8 @@
                     b[6][2], b[6][3], b[6][4], b[6][5]  // bot edge
                        ]
 
+            if (life > 12) {life = 12;}
+
             for (var i = 0; i < life ; i++) {
                 edge[i][0] = new card();
                 edge[i][0].shortName = "B "; // bloom
@@ -261,7 +263,7 @@
 
     game.prototype.ravageAdvance = function () {
         //JENNFER COMMENT: assumption is that an advance is basically a "simoon" move so make a new card called Advance that has a simoon effect
-        c = {name:"Advance", faction:"Ravage", type:"game effect", effect:"simoon", value:"1"}
+        c = {name:"Advance", faction:"Ravage", type:"game effect", effect:"simoon"}
         console.log("=== Step 2 : Move Elementals ===")
         this.resolveCard(c); // JENNFER NOTE NOT DONE
         this.showBoard();
@@ -292,8 +294,35 @@
     }
 
     game.prototype.endTurn = function() {
-        console.log("=== End of Turn ===");
-        this.ravageReveal();
+        if (this.players.Ravage.deck.length > 0) {
+            console.log("=== End of Turn ===");
+            this.ravageReveal();
+        } else {
+            console.log("=== Final Assault ===");
+            c = {name:"Final Assault", faction:"Ravage", type:"game effect", effect:"simoon"}
+            for (var i = 0; i < 4; i++) {
+                this.resolveCard(c);
+                this.showBoard();
+            }
+
+            for (var row = 2; row <= 5; row++) {
+                for (var col = 2; col <= 6; col++) {
+                    currentCard = this.board[row][col][0];
+                    if (currentCard != undefined) {
+                        if (currentCard.type.includes("tree")) {
+                            this.setLifeTotal(this.lifeTotal + currentCard.vitality);
+                        }
+                    }
+                }
+            }
+
+            if (this.lifeTotal >= 6) {
+                console.log("=== YOU WIN!!! ===")
+            } else {
+                console.log("The forest has been reduced to ash...");
+                console.log("=== YOU LOSE ===");
+            }
+        }
     }
 
     game.prototype.isValidTarget = function(card,target1,target2) {
@@ -473,6 +502,13 @@
                 target1.pop();
                 break;
             case "draw":
+                if (this.players.Sylvan.deck.length == 0) {
+                    for (var i = 0; i < this.players.Sylvan.discard.length; i++) {
+                        this.player.Sylvan.deck.push(this.players.Sylvan.discard[i].pop());
+                    }
+                    this.shuffle(this.players.Sylvan.deck);
+                }
+
                 for (var i = 0; i < card.value; i++) {
                     currentCard = this.players.Sylvan.deck.shift();
                     console.log(" -> Drew",currentCard.name);
@@ -601,9 +637,9 @@
 
 // things left to do
 // combat ** should be done
-// hedgehogs ** should be done
-// whale target check ** should be done
-// win condition
-// recycling the deck
+// hedgehogs ** done not tested
+// whale target check ** done not tested
+// win condition ** done not tested
+// recycling the deck ** done not tested
 // payment abuse check
 // target check for empty space
